@@ -3,6 +3,7 @@ import dotenv from "dotenv"
 import cors from "cors"
 import connectDB from "./src/config/db.js";
 import transactionRoutes from './src/routes/transaction.routes.js'
+import authRoutes from "./src/routes/auth.routes.js"
 
 dotenv.config();
 console.log("Server file loaded");
@@ -22,6 +23,7 @@ app.get("/",(req,res)=> {
 })
 
 app.use('/transactions',transactionRoutes);
+app.use('/auth',authRoutes);
 
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`vyay server running on ${PORT}`);
