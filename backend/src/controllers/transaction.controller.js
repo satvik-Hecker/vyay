@@ -1,4 +1,5 @@
 import Transaction from "../models/Transaction.js";
+import { calculateBalance } from "../services/balance.service.js";
 
 //temp user
 const USER_ID ='test-user-123';
@@ -41,3 +42,12 @@ export const deleteTransaction = async(req,res)=>{
         res.status(500).json({message:error.message})
     }
 }
+
+export const getBalance = async(req,res)=>{
+    try{
+        const data= await calculateBalance();
+        res.json(data);
+    }catch(error){
+        res.status(500).json({message: error.message});
+    }
+};
