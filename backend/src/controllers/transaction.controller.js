@@ -1,15 +1,13 @@
 import Transaction from "../models/Transaction.js";
 import { calculateBalance } from "../services/balance.service.js";
 
-//temp user
-const USER_ID ='test-user-123';
 
 //create transaction
 export const createTransaction = async(req, res)=> {
     try{
         const {type, amount, category,note}=req.body;
         const transaction = await Transaction.create({
-            userId: USER_ID,
+            userId: req.user.userId,
             type,
             amount,
             category,
@@ -24,7 +22,7 @@ export const createTransaction = async(req, res)=> {
 //get trnsaction
 export const getTransactions = async(req,res)=> {
     try{
-        const transactions = await Transaction.find({ userId: USER_ID})
+        const transactions = await Transaction.find({ userId: req.user.userId})
         .sort({ createdAt: -1});
         res.json(transactions)
     }catch(error){
@@ -36,7 +34,14 @@ export const getTransactions = async(req,res)=> {
 export const deleteTransaction = async(req,res)=>{
     try{
         const {id}=req.params;
-        await Transaction.findByIdAndDelete(id);
+        const transaction=await Transaction.findOneAndDelete({
+            _id:id,
+            userId:req.user.userId
+        });
+
+        if(!transaction){
+            return res.status(404).json({message: "Transaction not found"})
+        }
         res.json({message: "Transaction deleted"});
     }catch(error){
         res.status(500).json({message:error.message})
@@ -45,7 +50,7 @@ export const deleteTransaction = async(req,res)=>{
 
 export const getBalance = async(req,res)=>{
     try{
-        const data= await calculateBalance();
+        const data= await calculateBalance(req.user.userId);
         res.json(data);
     }catch(error){
         res.status(500).json({message: error.message});

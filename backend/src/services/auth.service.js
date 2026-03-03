@@ -39,9 +39,9 @@ export const registerUser = async(userData)=>{
 };
 
 export const loginUser = async({email,password})=> {
-    const user = User.findOne({email});
+    const user = await User.findOne({email});
     if(!user){
-        throw new Error("Invalid Email or password");
+        throw new Error("Invalid email or password");
     }
 
     const isMatch= await bcrypt.compare(password,user.password);
