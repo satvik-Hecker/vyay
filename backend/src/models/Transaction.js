@@ -3,7 +3,8 @@ import mongoose from 'mongoose';
 const transactionSchema = new mongoose.Schema(
     {
         userId: {
-            type:String,
+            type:mongoose.Schema.Types.ObjectId,
+            ref:"User",
             required: true,
         },
         type: {
@@ -19,10 +20,15 @@ const transactionSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
+        paymentMethod: {
+            type:String,
+            enum: ["cash","bank"],
+            required: true,
+        },
         note: {
             type:String,
         },
-        date:{
+        transactionDate:{
             type:Date,
             default: Date.now,
         },

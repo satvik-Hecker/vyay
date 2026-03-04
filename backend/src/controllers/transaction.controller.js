@@ -5,13 +5,15 @@ import { calculateBalance } from "../services/balance.service.js";
 //create transaction
 export const createTransaction = async(req, res)=> {
     try{
-        const {type, amount, category,note}=req.body;
+        const {type, amount, category,paymentMethod, note, transactionDate}=req.body;
         const transaction = await Transaction.create({
             userId: req.user.userId,
             type,
             amount,
             category,
+            paymentMethod,
             note,
+            transactionDate
         });
         res.status(201).json(transaction);
     }catch(error){

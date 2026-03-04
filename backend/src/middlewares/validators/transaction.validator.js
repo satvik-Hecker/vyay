@@ -12,7 +12,19 @@ export const transactionValidator = [
     body("category")
     .notEmpty()
     .withMessage("Category is required")
+    .toLowerCase()
     .trim(),
+
+    body("paymentMethod")
+    .notEmpty()
+    .withMessage("Payment method is required")
+    .isIn(["cash","bank"])
+    .withMessage("Payment method must be cash or bank"),
+
+    body("transactionDate")
+    .optional()
+    .isISO8601()
+    .withMessage("Invalid date format"),
 
     body("note")
     .optional()
