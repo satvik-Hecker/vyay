@@ -4,6 +4,7 @@ import cors from "cors"
 import connectDB from "./src/config/db.js";
 import transactionRoutes from './src/routes/transaction.routes.js'
 import authRoutes from "./src/routes/auth.routes.js"
+import { apiLimiter } from "./src/middlewares/rateLimit/apiLimiter.js";
 
 dotenv.config();
 console.log("Server file loaded");
@@ -22,9 +23,9 @@ app.get("/",(req,res)=> {
     console.log("Vyay API running...")
 })
 
-app.use('/transactions',transactionRoutes);
+app.use('/transactions',apiLimiter,transactionRoutes );
 app.use('/auth',authRoutes);
 
-app.listen(PORT, "0.0.0.0", () => {
+app.listen(PORT,  () => {
   console.log(`vyay server running on ${PORT}`);
 });
