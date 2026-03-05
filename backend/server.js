@@ -5,6 +5,7 @@ import connectDB from "./src/config/db.js";
 import transactionRoutes from './src/routes/transaction.routes.js'
 import authRoutes from "./src/routes/auth.routes.js"
 import { apiLimiter } from "./src/middlewares/rateLimit/apiLimiter.js";
+import dashboardRoutes from "./src/routes/dashboard.routes.js"
 
 dotenv.config();
 console.log("Server file loaded");
@@ -25,6 +26,7 @@ app.get("/",(req,res)=> {
 
 app.use('/transactions',apiLimiter,transactionRoutes );
 app.use('/auth',authRoutes);
+app.use("/dashboard", dashboardRoutes);
 
 app.listen(PORT,  () => {
   console.log(`vyay server running on ${PORT}`);
