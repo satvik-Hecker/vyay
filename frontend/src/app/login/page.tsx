@@ -38,12 +38,12 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-stone-950 p-4">
+    <div className="flex font-sans min-h-screen items-center justify-center bg-stone-950 p-4">
       <div className="flex w-full max-w-240 h-152 overflow-hidden rounded-md border border-stone-900 bg-stone-950 shadow-2xl">
 
         {/* LEFT PANEL */}
 
-        <div className="relative hidden w-[45%] flex-col justify-center overflow-hidden p-10 md:flex">
+        <div className="relative hidden w-[45%] flex-col justify-end overflow-hidden p-10 md:flex">
              <div className="absolute top-6 left-6 z-20 flex items-center gap-2">
             <Image
             src="/logo.png"
@@ -55,14 +55,12 @@ const LoginPage = () => {
           <div className="absolute inset-0 bg-[#88e900e3]" />
 
           <div className="relative z-10">
-            <h1 className="mb-4 text-4xl font-bold leading-tight text-stone-950">
-              Welcome Back<br />to Vyay
+            <h1 className="text-7xl font-surgena  text-stone-950 justify-start flex">
+              Vyay
             </h1>
 
-            <p className="text-sm leading-relaxed text-muted-foreground">
-              Take control of your money.<br />
-              Track expenses, analyze spending,<br />
-              and build smarter financial habits.
+            <p className="text-lg font-semibold mt-2 text-stone-950 leading-relaxed">
+             Because money disappears fast.
             </p>
           </div>
         </div>
@@ -71,17 +69,17 @@ const LoginPage = () => {
 
         <div className="flex w-full flex-col justify-center px-8 py-10 md:w-[55%] md:px-12">
 
-          <h2 className="mb-1 text-2xl font-semibold text-white flex justify-center">
-            Log In to Vyay
+          <h2 className="mb-1 text-4xl font-semibold text-white flex font-inklap justify-center">
+            Welcome Back
           </h2>
 
-          <p className="mb-6 flex justify-center text-md text-muted-foreground">
+          <p className="mb-12 flex justify-center text-md ">
             Enter your credentials to access your dashboard.
           </p>
 
           {/* OAuth Buttons (UI only for now) */}
 
-          <div className="mb-5 flex gap-3">
+          {/* <div className="mb-5 flex gap-3">
             <button
               type="button"
               className="flex h-11 flex-1 items-center justify-center gap-2 rounded-lg border border-stone-800  text-sm font-medium  transition-colors hover:bg-stone-900"
@@ -89,13 +87,7 @@ const LoginPage = () => {
               <GoogleIcon />
               Google
             </button>
-          </div>
-
-          <div className="mb-5 flex items-center gap-3">
-            <div className="h-px flex-1 bg-border" />
-            <span className="text-xs text-muted-foreground">Or</span>
-            <div className="h-px flex-1 bg-border" />
-          </div>
+          </div> */}
 
           {/* FORM */}
 
@@ -104,13 +96,13 @@ const LoginPage = () => {
             {/* EMAIL */}
 
             <div>
-              <label className="mb-1.5 block text-xs text-muted-foreground">
+              <label className="mb-1.5 block text-sm text-white font-sans">
                 Email
               </label>
 
-              <Input
+              <Input className="bg-zinc-900 placeholder:font-sans border-none focus-visible:ring-1"
                 type="email"
-                placeholder="eg. satvik@email.com"
+                placeholder="Enter your email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -120,12 +112,12 @@ const LoginPage = () => {
             {/* PASSWORD */}
 
             <div>
-              <label className="mb-1.5 block text-xs text-muted-foreground">
+              <label className="mb-1.5 block text-sm text-white font-sans">
                 Password
               </label>
 
               <div className="relative">
-                <Input
+                <Input className="bg-zinc-900 placeholder:font-sans border-none focus-visible:ring-1"
                   type={showPassword ? "text" : "password"}
                   placeholder="Enter your password"
                   value={password}
@@ -136,7 +128,7 @@ const LoginPage = () => {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-white hover:text-white/45 transition-colors"
                 >
                   {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
@@ -148,7 +140,7 @@ const LoginPage = () => {
             <button
               type="submit"
               disabled={loading}
-              className="mt-2 flex h-11 w-full items-center justify-center rounded-lg border border-foreground bg-transparent text-sm font-semibold text-foreground transition-colors hover:bg-foreground hover:text-background"
+              className="mt-2 flex h-11 w-full border-none items-center justify-center rounded-lg bg-lime-500 text-md font-sans font-semibold text-zinc-950  transition-colors hover:bg-lime-700 hover:text-background"
             >
               {loading ? "Logging in..." : "Log In"}
             </button>
