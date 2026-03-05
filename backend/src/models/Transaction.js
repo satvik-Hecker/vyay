@@ -15,9 +15,30 @@ const transactionSchema = new mongoose.Schema(
         amount: {
             type: Number,
             required: true,
+            min:0
         },
         category: {
             type: String,
+             enum: [
+            "Salary",
+            "Freelance",
+            "Business",
+            "Investment",
+            "Gift",
+            "Pocket Money",
+            "Food & Dining",
+            "Groceries",
+            "Transport",
+            "Rent",
+            "Utilities",
+            "Shopping",
+            "Entertainment",
+            "Travel",
+            "Health",
+            "Education",
+            "Subscriptions",
+            "Other"
+            ],
             required: true,
         },
         paymentMethod: {
@@ -27,6 +48,7 @@ const transactionSchema = new mongoose.Schema(
         },
         note: {
             type:String,
+            trim: true,
         },
         transactionDate:{
             type:Date,
@@ -35,5 +57,7 @@ const transactionSchema = new mongoose.Schema(
     },
     {timestamps:true}
 );
+transactionSchema.index({ userId: 1 });
+
 const Transaction = mongoose.model("Transaction", transactionSchema);
 export default Transaction

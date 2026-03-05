@@ -1,5 +1,6 @@
 import Transaction from "../models/Transaction.js";
 import { calculateBalance } from "../services/balance.service.js";
+import mongoose from "mongoose";
 
 
 //create transaction
@@ -31,13 +32,13 @@ export const getTransactions = async(req,res)=> {
         const filter = {userId: req.user.userId};
 
         if(category){
-            filter.category=category.toLowerCase()
+            filter.category=category
         }
         if(type){
-            filter.type=type.toLowerCase()
+            filter.type=type
         }
         if(paymentMethod){
-            filter.paymentMethod=paymentMethod.toLowerCase()
+            filter.paymentMethod=paymentMethod
         }
         if(startDate || endDate){
             filter.transactionDate={};
@@ -96,6 +97,49 @@ export const getBalance = async(req,res)=>{
     try{
         const data= await calculateBalance(req.user.userId);
         res.json(data);
+    }catch(error){
+        res.status(500).json({message: error.message});
+    }
+};
+
+//analytics
+export const getExpenseAnalytics = async(req,res)=>{
+    try{
+        const { startDate,endDate}= req.query;
+        const matchStage = {
+            userId: new mongoose.Types.ObjectId(req.user.userId),
+            type: "expense"
+        };
+
+        if(startDate||endDate){
+            matchStage.transactionDate={};
+
+            if(startDate){
+                matchStage.transactionDate.$gte= new Date (startDate);
+            }
+            if(endDate){
+                matchStage.transactionDate.$lte= new Date (endDate);
+            }
+        }
+
+        const analytics= await Transaction.aggregate([
+            {$match: matchStage},
+            {
+                $group: {
+                    _id: "$category",
+                    total: {$sum: "$amount"}  
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    category: "$_id",
+                    total:1
+                }
+            },
+            { $sort: {total: -1}}
+        ]);
+        res.json(analytics);
     }catch(error){
         res.status(500).json({message: error.message});
     }
