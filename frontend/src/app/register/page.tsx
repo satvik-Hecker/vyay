@@ -108,7 +108,7 @@ const RegisterPage = () => {
             Create Account
           </h2>
 
-          <p className="mb-12 flex justify-center text-md">
+          <p className="mb-4 flex justify-center text-md">
             Start tracking your expenses today.
           </p>
 
@@ -218,7 +218,7 @@ const RegisterPage = () => {
 
           </form>
 
-          <p className="mt-6 text-center text-sm">
+          <p className="mt-4 text-center text-sm">
             Already have an account?{" "}
             <span
               onClick={() => router.push("/login")}
