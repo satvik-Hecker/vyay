@@ -1,12 +1,22 @@
 import Sidebar from "@/components/dashboard/Sidebar";
+import SearchHeader from "@/components/dashboard/SearchHeader";
 
 export default function DashboardPage() {
   return (
-    <div className="flex p-4">
+    <div className="flex gap-4 p-4 bg-zinc-950 min-h-screen">
+
       <Sidebar />
-      <main className="ml-64 flex-1 p-8">
-        <h1 className="text-2xl font-bold">Dashboard</h1>
-      </main>
+
+      <div className="flex-1 flex flex-col gap-4">
+
+        <SearchHeader />
+
+        <div className="bg-zinc-900 rounded-xl p-6">
+          Dashboard content
+        </div>
+
+      </div>
+
     </div>
   );
 }
