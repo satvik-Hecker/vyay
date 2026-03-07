@@ -174,7 +174,7 @@ const LoginPage = () => {
                 className="flex h-11 flex-1 items-center justify-center gap-2 rounded-lg leading-relaxed border border-none bg-white text-md text-zinc-950 font-semibold transition-colors hover:bg-white/70"
               >
                 <GoogleIcon />
-                Google
+                Log in with Google
               </button>
             </div>
           </form>

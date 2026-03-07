@@ -23,7 +23,9 @@ async function apiRequest<T>(
   const data = await res.json();
 
   if (!res.ok) {
-    throw new Error(data.message || "API Error");
+    const message = data.message || 
+    (data.errors && data.errors[0]?.msg) || "API Error";
+    throw new Error(message);
   }
 
   return data;
