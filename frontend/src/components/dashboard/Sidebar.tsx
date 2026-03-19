@@ -15,44 +15,81 @@ import {
 } from "@hugeicons/core-free-icons";
 
 import Image from "next/image";
-import { Menu } from "lucide-react";
+import { Menu, X } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function Sidebar() {
   const [activeItem, setActiveItem] = useState("dashboard");
   const [open, setOpen] = useState(false);
 
+  const handleClick = (item: string) => {
+    setActiveItem(item);
+    setOpen(false);
+  };
+
   return (
     <>
-      {/* Hamburger Button */}
+      {/* Hamburger / Close Button */}
       <button
-        onClick={() => setOpen(!open)}
-        className="md:hidden fixed top-4 right-4 z-50 bg-lime-500 p-2 rounded-md"
-      >
-        <Menu className="text-black" />
+      onClick={() => setOpen(!open)}
+      className={`md:hidden fixed top-5 left-4 z-50 w-11 h-11 flex items-center justify-center rounded-xl transition-colors ${
+        open ? "bg-transparent" : "bg-lime-500"
+      }`}
+    >
+        <AnimatePresence mode="wait" initial={false}>
+          {open ? (
+            <motion.div
+              key="close"
+              initial={{ rotate: -90, scale: 0.7, opacity: 0 }}
+              animate={{ rotate: 0, scale: 1, opacity: 1 }}
+              exit={{ rotate: 90, scale: 0.7, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              <X className="text-lime-500 " />
+            </motion.div>
+          ) : (
+            <motion.div
+              key="menu"
+              initial={{ rotate: 90, scale: 0.7, opacity: 0 }}
+              animate={{ rotate: 0, scale: 1, opacity: 1 }}
+              exit={{ rotate: -90, scale: 0.7, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              <Menu className="text-black" />
+            </motion.div>
+          )}
+        </AnimatePresence>
       </button>
+
+      {/* Overlay */}
+      {open && (
+        <div
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-30 md:hidden"
+          onClick={() => setOpen(false)}
+        />
+      )}
 
       {/* Sidebar */}
       <div
         className={`
         fixed md:relative
         top-0 left-0
+        h-screen md:h-[calc(100vh-2rem)]
         w-64
         bg-zinc-900
-        rounded-xl
+        md:rounded-xl
         py-4
-        flex
-        h-[calc(100vh-2rem)]
+        flex flex-col
         font-sans
-        flex-col
-        shadow-sm
-        transition-transform duration-300
+        shadow-xl
+        transition-transform duration-300 ease-in-out
         z-40
         ${open ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
         `}
       >
         {/* Logo */}
-        <div className="px-6 flex items-center gap-4 mb-4">
-          <div className="w-9 h-9 relative rounded-md flex items-center justify-center bg-linear-to-br from-lime-400 to-lime-600">
+        <div className="px-6 flex items-center gap-4 mb-4 pl-16 md:pl-6">
+          <div className="w-9 h-9 relative rounded-md flex items-center justify-center bg-gradient-to-br from-lime-400 to-lime-600">
             <div className="absolute inset-0 bg-white/20 rounded-md blur-md opacity-30"></div>
 
             <Image
@@ -80,35 +117,31 @@ export default function Sidebar() {
             icon={DashboardSquare02Icon}
             label="Dashboard"
             active={activeItem === "dashboard"}
-            onClick={() => setActiveItem("dashboard")}
+            onClick={() => handleClick("dashboard")}
           />
-
           <SidebarItem
             icon={Task01Icon}
             label="Transactions"
             active={activeItem === "transactions"}
-            onClick={() => setActiveItem("transactions")}
+            onClick={() => handleClick("transactions")}
           />
-
           <SidebarItem
             icon={Calendar03Icon}
             label="Calendar"
             active={activeItem === "calendar"}
-            onClick={() => setActiveItem("calendar")}
+            onClick={() => handleClick("calendar")}
           />
-
           <SidebarItem
             icon={Analytics01Icon}
             label="Analytics"
             active={activeItem === "analytics"}
-            onClick={() => setActiveItem("analytics")}
+            onClick={() => handleClick("analytics")}
           />
-
           <SidebarItem
             icon={UserGroupIcon}
             label="Budgets"
             active={activeItem === "budgets"}
-            onClick={() => setActiveItem("budgets")}
+            onClick={() => handleClick("budgets")}
           />
         </nav>
 
@@ -123,21 +156,18 @@ export default function Sidebar() {
             icon={Settings01Icon}
             label="Settings"
             active={activeItem === "settings"}
-            onClick={() => setActiveItem("settings")}
+            onClick={() => handleClick("settings")}
           />
-
           <SidebarItem
             icon={HelpCircleIcon}
             label="Help"
             active={activeItem === "help"}
-            onClick={() => setActiveItem("help")}
+            onClick={() => handleClick("help")}
           />
-
           <SidebarItem
             icon={Logout01Icon}
             label="Logout"
-            active={false}
-            onClick={() => {}}
+            onClick={() => setOpen(false)}
           />
         </nav>
       </div>
@@ -152,7 +182,12 @@ type SidebarItemProps = {
   onClick: () => void;
 };
 
-function SidebarItem({ icon, label, active = false, onClick }: SidebarItemProps) {
+function SidebarItem({
+  icon,
+  label,
+  active = false,
+  onClick,
+}: SidebarItemProps) {
   return (
     <div
       onClick={onClick}
