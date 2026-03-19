@@ -1,4 +1,5 @@
 "use client";
+import StatCard from "./StatCard";
 
 export default function DashboardMain() {
   return (
@@ -30,8 +31,31 @@ export default function DashboardMain() {
 
           {/* 🔢 Stats */}
           <div className="grid grid-cols-4 gap-4">
-            {/* Stat cards coming next */}
-          </div>
+            <StatCard
+                title="Total Balance"
+                value="₹24,500"
+                change={8}
+                highlighted
+            />
+
+            <StatCard
+                title="Monthly Income"
+                value="₹40,000"
+                change={5}
+            />
+
+            <StatCard
+                title="Monthly Expense"
+                value="₹18,200"
+                change={-2}
+            />
+
+            <StatCard
+                title="Transactions"
+                value="128"
+                change={12}
+            />
+            </div>
 
           {/* 📊 Middle Section */}
           <div className="grid grid-cols-3 gap-6">
