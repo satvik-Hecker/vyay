@@ -5,6 +5,7 @@ import SearchHeader from "@/components/dashboard/SearchHeader";
 import StatCard from "@/components/dashboard/StatCard";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import DashboardMain from "@/components/dashboard/DashboardMain";
 
 const BASE_URL = "http://localhost:5000";
 
@@ -101,15 +102,7 @@ export default function DashboardPage() {
       <div className="flex-1 flex flex-col gap-4">
         <SearchHeader user={user ?? undefined} />
 
-        <div className="bg-zinc-900 rounded-xl p-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
-            {stats.map((stat) => (
-              <StatCard key={stat.title} {...stat} />
-            ))}
-          </div>
-
-          Dashboard content
-        </div>
+        <DashboardMain></DashboardMain>
       </div>
     </div>
   );
