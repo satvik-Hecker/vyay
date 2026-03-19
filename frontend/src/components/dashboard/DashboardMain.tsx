@@ -69,7 +69,7 @@ export default function DashboardMain() {
   }
 
   return (
-    <div className="flex-1 p-6 overflow-hidden">
+    <div className="flex-1  overflow-hidden">
       <div className="h-full bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 overflow-y-auto font-sans">
 
         <div className="space-y-6">
@@ -77,7 +77,7 @@ export default function DashboardMain() {
           {/* 🧭 Header */}
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-semibold text-white">
+              <h1 className="text-3xl font-semibold text-white">
                 Dashboard
               </h1>
               <p className="text-sm text-gray-400">
