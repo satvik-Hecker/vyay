@@ -2,19 +2,12 @@
 
 import Sidebar from "@/components/dashboard/Sidebar";
 import SearchHeader from "@/components/dashboard/SearchHeader";
-import StatCard from "@/components/dashboard/StatCard";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import DashboardMain from "@/components/dashboard/DashboardMain";
 
 const BASE_URL = "http://localhost:5000";
 
-type Stat = {
-  title: string;
-  value: string;
-  subtitle: string;
-  primary?: boolean;
-};
 
 type User = {
   name: string;
@@ -22,7 +15,6 @@ type User = {
 };
 
 export default function DashboardPage() {
-  const [stats, setStats] = useState<Stat[]>([]);
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -54,29 +46,7 @@ export default function DashboardPage() {
 
         setUser(data.user);
 
-        setStats([
-          {
-            title: "Total Balance",
-            value: `₹${data.totalBalance}`,
-            subtitle: "Updated just now",
-            primary: true,
-          },
-          {
-            title: "Monthly Income",
-            value: `₹${data.monthlyIncome}`,
-            subtitle: "This month",
-          },
-          {
-            title: "Monthly Expense",
-            value: `₹${data.monthlyExpense}`,
-            subtitle: "This month",
-          },
-          {
-            title: "Transactions",
-            value: String(data.transactionCount),
-            subtitle: "This month",
-          },
-        ]);
+        
       } catch (error) {
         console.error("Dashboard fetch error", error);
       } finally {

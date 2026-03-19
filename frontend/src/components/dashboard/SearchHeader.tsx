@@ -25,7 +25,7 @@ export default function SearchHeader({ user }: HeaderProps) {
   const avatar = `https://api.dicebear.com/9.x/micah/png?seed=${email}&size=64&backgroundType=gradientLinear&baseColor=ac6651,f9c9b6&hairColor=000000,77311d,9287ff,ac6651,d2eff3,e0ddff,f4d150,f9c9b6,fc909f,ffeba4,ffedef,ffffff,6bd9e9&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf&earringsProbability=100`;
 
   return (
-    <header className="flex items-center justify-between gap-4 bg-zinc-900 px-5 h-12 rounded-xl font-sans ml-[60px] md:ml-0">
+    <header className="flex items-center justify-between gap-4 bg-zinc-900 px-5 h-12 rounded-xl font-sans ml-15 md:ml-0">
       
       {/* Search */}
       <div className="flex items-center gap-2 bg-zinc-800 px-3 h-8 rounded-full w-full max-w-md">

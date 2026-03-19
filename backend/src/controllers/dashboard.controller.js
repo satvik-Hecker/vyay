@@ -8,12 +8,20 @@ export const getDashboard = async (req, res) => {
 
     const user = await User.findById(userId).select("name email");
 
+    const now = new Date();
+
+    const startOfThisMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    const startOfLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+    const endOfLastMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+
     const transactions = await Transaction.aggregate([
       { $match: { userId } },
 
       {
         $facet: {
-          summary: [
+          
+          thisMonth: [
+            { $match: { transactionDate: { $gte: startOfThisMonth } } },
             {
               $group: {
                 _id: "$type",
@@ -22,6 +30,30 @@ export const getDashboard = async (req, res) => {
             }
           ],
 
+          
+          lastMonth: [
+            {
+              $match: {
+                transactionDate: {
+                  $gte: startOfLastMonth,
+                  $lte: endOfLastMonth
+                }
+              }
+            },
+            {
+              $group: {
+                _id: "$type",
+                total: { $sum: "$amount" }
+              }
+            }
+          ],
+
+          
+          transactionCount: [
+            { $count: "count" }
+          ],
+
+          
           categoryAnalytics: [
             { $match: { type: "expense" } },
             {
@@ -31,61 +63,51 @@ export const getDashboard = async (req, res) => {
               }
             },
             { $sort: { total: -1 } }
-          ],
-
-          paymentMethods: [
-            { $match: { type: "expense" } },
-            {
-              $group: {
-                _id: "$paymentMethod",
-                total: { $sum: "$amount" }
-              }
-            }
-          ],
-
-          monthlyExpenses: [
-            { $match: { type: "expense" } },
-            {
-              $group: {
-                _id: { $month: "$transactionDate" },
-                total: { $sum: "$amount" }
-              }
-            },
-            { $sort: { "_id": 1 } }
-          ],
-
-          transactionCount: [
-            {
-              $count: "count"
-            }
           ]
         }
       }
     ]);
 
-    const summary = transactions[0].summary;
+    
+    const getValue = (arr, type) =>
+      arr.find((i) => i._id === type)?.total || 0;
 
-    let income = 0;
-    let expense = 0;
+    const thisMonth = transactions[0].thisMonth;
+    const lastMonth = transactions[0].lastMonth;
 
-    summary.forEach(item => {
-      if (item._id === "income") income = item.total;
-      if (item._id === "expense") expense = item.total;
-    });
+    const income = getValue(thisMonth, "income");
+    const expense = getValue(thisMonth, "expense");
+
+    const lastIncome = getValue(lastMonth, "income");
+    const lastExpense = getValue(lastMonth, "expense");
 
     const totalBalance = income - expense;
 
+    
+    const calcChange = (current, prev) => {
+      if (prev === 0) return current === 0 ? 0 : 100;
+      return ((current - prev) / prev) * 100;
+    };
+
     res.json({
       user,
-      totalBalance,
-      monthlyIncome: income,
-      monthlyExpense: expense,
-      transactionCount:
-        transactions[0].transactionCount[0]?.count || 0,
 
-      categoryAnalytics: transactions[0].categoryAnalytics,
-      paymentMethods: transactions[0].paymentMethods,
-      monthlyExpenses: transactions[0].monthlyExpenses
+      stats: {
+        totalBalance,
+        income,
+        expense,
+        transactions:
+          transactions[0].transactionCount[0]?.count || 0,
+
+        changes: {
+          balance: calcChange(totalBalance, lastIncome - lastExpense),
+          income: calcChange(income, lastIncome),
+          expense: calcChange(expense, lastExpense),
+          transactions: 0 // (optional: can compute later)
+        }
+      },
+
+      categoryAnalytics: transactions[0].categoryAnalytics
     });
 
   } catch (error) {

@@ -89,7 +89,7 @@ export default function Sidebar() {
       >
         {/* Logo */}
         <div className="px-6 flex items-center gap-4 mb-4 pl-16 md:pl-6">
-          <div className="w-9 h-9 relative rounded-md flex items-center justify-center bg-gradient-to-br from-lime-400 to-lime-600">
+          <div className="w-9 h-9 relative rounded-md flex items-center justify-center bg-linear-to-br from-lime-400 to-lime-600">
             <div className="absolute inset-0 bg-white/20 rounded-md blur-md opacity-30"></div>
 
             <Image
