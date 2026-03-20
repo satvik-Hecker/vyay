@@ -10,107 +10,136 @@ export const getDashboard = async (req, res) => {
 
     const now = new Date();
 
+    // ---------- DATE RANGES ----------
     const startOfThisMonth = new Date(now.getFullYear(), now.getMonth(), 1);
     const startOfLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
     const endOfLastMonth = new Date(now.getFullYear(), now.getMonth(), 0);
 
-    const transactions = await Transaction.aggregate([
-      { $match: { userId } },
+    const last7Days = new Date();
+    last7Days.setDate(now.getDate() - 6);
 
-      {
-        $facet: {
-          
-          thisMonth: [
-            { $match: { transactionDate: { $gte: startOfThisMonth } } },
-            {
-              $group: {
-                _id: "$type",
-                total: { $sum: "$amount" }
-              }
-            }
-          ],
+    startOfThisMonth.setHours(0, 0, 0, 0);
+    startOfLastMonth.setHours(0, 0, 0, 0);
+    endOfLastMonth.setHours(23, 59, 59, 999);
+    last7Days.setHours(0, 0, 0, 0);
 
-          
-          lastMonth: [
-            {
-              $match: {
-                transactionDate: {
-                  $gte: startOfLastMonth,
-                  $lte: endOfLastMonth
-                }
-              }
-            },
-            {
-              $group: {
-                _id: "$type",
-                total: { $sum: "$amount" }
-              }
-            }
-          ],
+    // ---------- FETCH DATA ----------
+    const [currentMonthTxn, lastMonthTxn, last7DaysTxn] = await Promise.all([
+      Transaction.find({
+        userId,
+        transactionDate: { $gte: startOfThisMonth },
+      }).lean(),
 
-          
-          transactionCount: [
-            { $count: "count" }
-          ],
+      Transaction.find({
+        userId,
+        transactionDate: { $gte: startOfLastMonth, $lte: endOfLastMonth },
+      }).lean(),
 
-          
-          categoryAnalytics: [
-            { $match: { type: "expense" } },
-            {
-              $group: {
-                _id: "$category",
-                total: { $sum: "$amount" }
-              }
-            },
-            { $sort: { total: -1 } }
-          ]
-        }
-      }
+      Transaction.find({
+        userId,
+        transactionDate: { $gte: last7Days },
+      }).lean(),
     ]);
 
-    
-    const getValue = (arr, type) =>
-      arr.find((i) => i._id === type)?.total || 0;
+    //console.log("Current Month Txns:", currentMonthTxn);
 
-    const thisMonth = transactions[0].thisMonth;
-    const lastMonth = transactions[0].lastMonth;
+    // ---------- CALCULATE STATS ----------
+    const calcStats = (txns) => {
+      let income = 0;
+      let expense = 0;
 
-    const income = getValue(thisMonth, "income");
-    const expense = getValue(thisMonth, "expense");
+      txns.forEach((t) => {
+        if (t.type === "income") income += t.amount;
+        else expense += t.amount;
+      });
 
-    const lastIncome = getValue(lastMonth, "income");
-    const lastExpense = getValue(lastMonth, "expense");
-
-    const totalBalance = income - expense;
-
-    
-    const calcChange = (current, prev) => {
-      if (prev === 0) return current === 0 ? 0 : 100;
-      return ((current - prev) / prev) * 100;
+      return {
+        income,
+        expense,
+        balance: income - expense,
+        transactions: txns.length,
+      };
     };
 
+    const currentStats = calcStats(currentMonthTxn);
+    const lastStats = calcStats(lastMonthTxn);
+
+    // ---------- % CHANGE ----------
+    const calcChange = (curr, last) => {
+      if (last === 0) return curr === 0 ? 0 : 100;
+      return Math.round(((curr - last) / last) * 100);
+    };
+
+    // ---------- DATE FORMAT ----------
+    const formatDate = (date) => {
+      const d = new Date(date);
+      return d.toISOString().split("T")[0]; // cleaner
+    };
+
+    // ---------- WEEKLY SPENDING ----------
+    const weeklyMap = {};
+
+    last7DaysTxn.forEach((t) => {
+      if (t.type !== "expense") return;
+
+      const key = formatDate(t.transactionDate); // ✅ FIXED
+
+      if (!weeklyMap[key]) weeklyMap[key] = 0;
+      weeklyMap[key] += t.amount;
+    });
+
+    const weeklySpending = [];
+
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date();
+      d.setDate(now.getDate() - i);
+
+      const key = formatDate(d);
+
+      weeklySpending.push({
+        date: key,
+        amount: weeklyMap[key] || 0,
+      });
+    }
+
+    // ---------- RECENT ----------
+    const recentTransactions = await Transaction.find({ userId })
+      .sort({ transactionDate: -1 })
+      .limit(5);
+
+    // ---------- RESPONSE ----------
     res.json({
       user,
 
       stats: {
-        totalBalance,
-        income,
-        expense,
-        transactions:
-          transactions[0].transactionCount[0]?.count || 0,
-
+        totalBalance: currentStats.balance,
+        income: currentStats.income,
+        expense: currentStats.expense,
+        transactions: currentStats.transactions,
         changes: {
-          balance: calcChange(totalBalance, lastIncome - lastExpense),
-          income: calcChange(income, lastIncome),
-          expense: calcChange(expense, lastExpense),
-          transactions: 0 // (optional: can compute later)
-        }
+          balance: calcChange(currentStats.balance, lastStats.balance),
+          income: calcChange(currentStats.income, lastStats.income),
+          expense: calcChange(currentStats.expense, lastStats.expense),
+          transactions: calcChange(
+            currentStats.transactions,
+            lastStats.transactions
+          ),
+        },
       },
 
-      categoryAnalytics: transactions[0].categoryAnalytics
+      weeklySpending,
+
+      recentTransactions: recentTransactions.map((tx) => ({
+        _id: tx._id,
+        category: tx.category,
+        amount: tx.amount,
+        type: tx.type,
+        transactionDate: tx.transactionDate,
+      })),
     });
 
   } catch (error) {
+    console.error("Dashboard error:", error);
     res.status(500).json({ message: error.message });
   }
 };
