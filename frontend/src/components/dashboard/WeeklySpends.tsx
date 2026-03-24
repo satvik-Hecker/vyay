@@ -77,7 +77,7 @@ export default function WeeklySpendingCard({ data }: Props) {
   }
 
   return (
-    <div className="relative w-full rounded-2xl border border-white/10 bg-white/70 dark:bg-neutral-900/60 backdrop-blur-xl p-4 pb-0">
+    <div className="flex flex-col bg-white/5 border border-white/10 rounded-xl p-5">
       
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
@@ -87,7 +87,7 @@ export default function WeeklySpendingCard({ data }: Props) {
       </div>
 
       {/* Chart */}
-      <div className="relative h-36">
+      <div className="relative h-32">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={chartData}>
             

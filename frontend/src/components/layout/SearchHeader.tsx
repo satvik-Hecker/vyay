@@ -8,6 +8,7 @@ import {
 } from "@hugeicons/core-free-icons";
 
 import Image from "next/image";
+import { useState } from "react";
 
 type User = {
   name?: string;
@@ -22,13 +23,17 @@ export default function SearchHeader({ user }: HeaderProps) {
   const name = user?.name ?? "Guest";
   const email = user?.email ?? "guest@vyay.app";
 
-  const avatar = `https://api.dicebear.com/9.x/micah/png?seed=${email}&size=64&backgroundType=gradientLinear&baseColor=ac6651,f9c9b6&hairColor=000000,77311d,9287ff,ac6651,d2eff3,e0ddff,f4d150,f9c9b6,fc909f,ffeba4,ffedef,ffffff,6bd9e9&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf&earringsProbability=100`;
+  const [query, setQuery] = useState("");
+
+  const avatar = `https://api.dicebear.com/9.x/micah/png?seed=${email}&size=64`;
 
   return (
-    <header className="flex items-center justify-between gap-4 bg-zinc-900 px-5 h-12 rounded-xl font-sans ml-15 md:ml-0">
+    <header className="w-full flex items-center justify-between gap-3 sm:gap-4 bg-zinc-900 px-3 sm:px-5 py-2 sm:py-3 rounded-xl font-sans backdrop-blur-xl
+          border border-white/5">
       
-      {/* Search */}
-      <div className="flex items-center gap-2 bg-zinc-800 px-3 h-8 rounded-full w-full max-w-md">
+      {/* 🔍 Search */}
+      <div className="flex items-center gap-2 bg-zinc-800 px-3 sm:px-4 h-9 sm:h-10 rounded-full flex-1 max-w-full sm:max-w-md transition focus-within:ring-2 focus-within:ring-lime-500">
+        
         <HugeiconsIcon
           icon={Search01Icon}
           size={16}
@@ -38,13 +43,15 @@ export default function SearchHeader({ user }: HeaderProps) {
 
         <input
           type="text"
-          placeholder="Search"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Search transactions..."
           className="bg-transparent outline-none text-sm text-zinc-200 flex-1 placeholder:text-zinc-400"
         />
       </div>
 
-      {/* Right Section */}
-      <div className="flex items-center gap-2 sm:gap-4">
+      {/* 🔔 Right Section */}
+      <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
         
         {/* Messages */}
         <button
@@ -72,8 +79,9 @@ export default function SearchHeader({ user }: HeaderProps) {
           />
         </button>
 
-        {/* Profile */}
-        <div className="flex items-center gap-2 sm:gap-3 px-2 py-1 rounded-lg">
+        {/* 👤 Profile */}
+        <div className="flex items-center gap-2 sm:gap-3 px-1 sm:px-2 py-1 rounded-lg">
+          
           <Image
             src={avatar}
             alt="profile avatar"
@@ -82,7 +90,8 @@ export default function SearchHeader({ user }: HeaderProps) {
             className="rounded-full border border-zinc-700"
           />
 
-          <div className="hidden sm:block leading-tight">
+          {/* Hide text on small screens */}
+          <div className="hidden md:block leading-tight">
             <p className="text-sm text-white font-medium">
               {name}
             </p>

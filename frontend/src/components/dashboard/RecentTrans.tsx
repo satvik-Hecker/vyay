@@ -46,25 +46,31 @@ export default function RecentTransactionsCard({
   }
 
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/70 dark:bg-neutral-900/60 p-5">
+    <div className="h-full flex flex-col bg-white/5 border border-white/10 rounded-xl p-5">
 
       {/* Header */}
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-semibold text-zinc-900 dark:text-white">
+      <div className="flex items-center justify-between mb-3">
+        <h2 className="text-base sm:text-lg font-semibold text-zinc-900 dark:text-white">
           Recent Transactions
         </h2>
 
-        <button className="p-1.5 rounded-full border border-zinc-800 bg-lime-500 text-black hover:bg-lime-600 transition">
+        <button className="p-2 rounded-full border border-zinc-800 bg-lime-500 text-black hover:bg-lime-600 active:scale-95 transition">
           <Plus size={16} />
         </button>
       </div>
 
-      {/* Transactions */}
-      <div className="space-y-4">
+      {/* Content */}
+      <div className="flex-1 overflow-y-auto pr-1 space-y-3 sm:space-y-4 scrollbar-thin">
+
         {transactions.length === 0 ? (
-          <p className="text-sm text-zinc-500">
-            No transactions yet
-          </p>
+          <div className="flex flex-col items-center justify-center py-10 text-center">
+            <p className="text-sm text-zinc-500">
+              No transactions yet
+            </p>
+            <p className="text-xs text-zinc-400 mt-1">
+              Start by adding your first one
+            </p>
+          </div>
         ) : (
           transactions.map((tx) => {
             const isIncome = tx.type === "income";
@@ -72,12 +78,12 @@ export default function RecentTransactionsCard({
             return (
               <div
                 key={tx._id}
-                className="flex items-center justify-between"
+                className="flex items-center justify-between gap-3 hover:bg-black/5  p-0.5 rounded-lg transition"
               >
                 {/* Left */}
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 min-w-0">
                   <div
-                    className={`p-2 rounded-full ${
+                    className={`p-2 rounded-full shrink-0 ${
                       isIncome
                         ? "bg-green-200/70 text-green-800"
                         : "bg-red-200/70 text-red-800"
@@ -89,19 +95,19 @@ export default function RecentTransactionsCard({
                           ? MoneyBag02Icon
                           : Invoice03Icon) as IconSvgElement
                       }
-                      size={18}
+                      size={16}
                     />
                   </div>
 
-                  <p className="font-medium text-zinc-900 dark:text-white">
+                  <p className="font-medium text-sm sm:text-base text-zinc-900 dark:text-white truncate">
                     {tx.category}
                   </p>
                 </div>
 
                 {/* Right */}
-                <div className="text-right">
+                <div className="text-right shrink-0">
                   <p
-                    className={`font-semibold ${
+                    className={`font-semibold text-sm sm:text-base ${
                       isIncome
                         ? "text-green-700"
                         : "text-red-700"
@@ -110,7 +116,7 @@ export default function RecentTransactionsCard({
                     {isIncome ? "+" : "-"}₹{tx.amount}
                   </p>
 
-                  <p className="text-xs text-zinc-500">
+                  <p className="text-[11px] sm:text-xs text-zinc-500">
                     {formatTime(tx.transactionDate)}
                   </p>
                 </div>
@@ -121,11 +127,9 @@ export default function RecentTransactionsCard({
       </div>
 
       {/* Footer */}
-      <div className="mt-3 text-center">
-        <button className="text-sm text-blue-600 hover:underline">
+        <button className="w-full text-sm font-medium text-blue-600 hover:underline">
           View All →
         </button>
-      </div>
     </div>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 
-import Sidebar from "@/components/dashboard/Sidebar";
-import SearchHeader from "@/components/dashboard/SearchHeader";
+import Sidebar from "@/components/layout/Sidebar";
+import SearchHeader from "@/components/layout/SearchHeader";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import DashboardMain from "@/components/dashboard/DashboardMain";

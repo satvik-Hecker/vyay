@@ -41,8 +41,6 @@ export const getDashboard = async (req, res) => {
       }).lean(),
     ]);
 
-    //console.log("Current Month Txns:", currentMonthTxn);
-
     // ---------- CALCULATE STATS ----------
     const calcStats = (txns) => {
       let income = 0;
@@ -73,7 +71,7 @@ export const getDashboard = async (req, res) => {
     // ---------- DATE FORMAT ----------
     const formatDate = (date) => {
       const d = new Date(date);
-      return d.toISOString().split("T")[0]; // cleaner
+      return d.toISOString().split("T")[0];
     };
 
     // ---------- WEEKLY SPENDING ----------
@@ -82,7 +80,7 @@ export const getDashboard = async (req, res) => {
     last7DaysTxn.forEach((t) => {
       if (t.type !== "expense") return;
 
-      const key = formatDate(t.transactionDate); // ✅ FIXED
+      const key = formatDate(t.transactionDate);
 
       if (!weeklyMap[key]) weeklyMap[key] = 0;
       weeklyMap[key] += t.amount;
@@ -107,12 +105,50 @@ export const getDashboard = async (req, res) => {
       .sort({ transactionDate: -1 })
       .limit(5);
 
+    // ---------- CASH vs BANK (REAL BALANCE) ----------
+    const balanceResult = await Transaction.aggregate([
+      {
+        $match: { userId },
+      },
+      {
+        $group: {
+          _id: "$paymentMethod",
+          income: {
+            $sum: {
+              $cond: [{ $eq: ["$type", "income"] }, "$amount", 0],
+            },
+          },
+          expense: {
+            $sum: {
+              $cond: [{ $eq: ["$type", "expense"] }, "$amount", 0],
+            },
+          },
+        },
+      },
+    ]);
+
+    let cash = 0;
+    let bank = 0;
+
+    balanceResult.forEach((item) => {
+      const balance = item.income - item.expense;
+
+      if (item._id === "cash") {
+        cash = balance;
+      } else if (item._id === "bank") {
+        bank = balance;
+      }
+    });
+
+    // 🔥 REAL TOTAL BALANCE
+    const totalBalance = cash + bank;
+
     // ---------- RESPONSE ----------
     res.json({
       user,
 
       stats: {
-        totalBalance: currentStats.balance,
+        totalBalance: totalBalance, // ✅ FIXED
         income: currentStats.income,
         expense: currentStats.expense,
         transactions: currentStats.transactions,
@@ -129,6 +165,11 @@ export const getDashboard = async (req, res) => {
 
       weeklySpending,
 
+      cashVsBalance: {
+        cash,
+        bank,
+      },
+
       recentTransactions: recentTransactions.map((tx) => ({
         _id: tx._id,
         category: tx.category,
@@ -137,7 +178,6 @@ export const getDashboard = async (req, res) => {
         transactionDate: tx.transactionDate,
       })),
     });
-
   } catch (error) {
     console.error("Dashboard error:", error);
     res.status(500).json({ message: error.message });
