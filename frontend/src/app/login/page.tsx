@@ -28,6 +28,13 @@ const LoginPage = () => {
       });
 
       localStorage.setItem("token", res.token);
+        localStorage.setItem(
+        "user",
+        JSON.stringify({
+          name: res.user?.name,
+          email: res.user?.email,
+        })
+      );
       toast.success("Login successful");
 
       router.push("/dashboard");
@@ -67,7 +74,7 @@ const LoginPage = () => {
               A simple way to track your spending
             </p>
 
-            <div className="mt-5 flex gap-4 font-sans">
+            <div className="mt-5 flex text-zinc-200 gap-4 font-sans">
               <div className="flex-1 rounded-sm bg-zinc-900 px-3 py-3 min-h-28">
                 <div className="mb-3">
                   <Receipt className="h-5 w-5" />
@@ -106,12 +113,12 @@ const LoginPage = () => {
             Welcome Back
           </h2>
 
-          <p className="mb-12 flex justify-center text-md">
+          <p className="mb-12 flex justify-center text-md text-zinc-300">
             Enter your credentials to access your dashboard.
           </p>
 
           <form
-            className="space-y-4 max-w-md mx-auto w-full"
+            className="space-y-4 text-zinc-200 max-w-md mx-auto w-full"
             onSubmit={handleLogin}
           >
             <div>

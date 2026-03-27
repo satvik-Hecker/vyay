@@ -77,7 +77,7 @@ const RegisterPage = () => {
               A simple way to track your spending
             </p>
 
-            <div className="mt-5 flex gap-4 font-sans">
+            <div className="text-zinc-200 mt-5 flex gap-4 font-sans">
               <div className="flex-1 rounded-sm bg-zinc-900 px-3 py-3 min-h-28">
                 <div className="mb-3">
                   <Receipt className="h-5 w-5" />
@@ -108,22 +108,22 @@ const RegisterPage = () => {
             Create Account
           </h2>
 
-          <p className="mb-4 flex justify-center text-md">
+          <p className="mb-4 flex justify-center text-md text-zinc-300">
             Start tracking your expenses today.
           </p>
 
           <form
-            className="space-y-4 max-w-md mx-auto w-full"
+            className="space-y-4 max-w-md mx-auto w-full text-zinc-200"
             onSubmit={handleRegister}
           >
 
-            <div>
+            <div className="">
               <label className="mb-1.5 block text-sm text-white">
                 Name
               </label>
 
               <Input
-                className="bg-zinc-900 border-none focus-visible:ring-1"
+                className=" text-zinc-200 bg-zinc-900 border-none focus-visible:ring-1"
                 placeholder="Enter your name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}

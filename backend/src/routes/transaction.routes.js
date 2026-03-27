@@ -1,27 +1,38 @@
-import express from 'express';
-import { createTransaction,getTransactions,deleteTransaction } from '../controllers/transaction.controller.js';
-import { getBalance } from '../controllers/transaction.controller.js';
-import authMiddleware from '../middlewares/auth.middleware.js';
-import { transactionValidator } from '../middlewares/validators/transaction.validator.js';
-import { validate } from '../middlewares/validators/auth.validator.js';
-import { getExpenseAnalytics } from '../controllers/transaction.controller.js';
+import express from "express";
+import {
+  createTransaction,
+  getTransactions,
+  deleteTransaction,
+  updateTransaction,
+  getStats,
+  getExpenseAnalytics,
+} from "../controllers/transaction.controller.js";
 
-const router= express.Router();
+import authMiddleware from "../middlewares/auth.middleware.js";
+import { transactionValidator } from "../middlewares/validators/transaction.validator.js";
+import { validate } from "../middlewares/validators/auth.validator.js";
 
+const router = express.Router();
+
+// 🔒 protect all routes
 router.use(authMiddleware);
-//get balance
-router.get('/balance',getBalance)
 
-//create
-router.post('/',transactionValidator,validate,createTransaction);
+// ✅ STATS (keep ABOVE /:id routes)
+router.get("/stats", getStats);
 
-//get all
-router.get('/',getTransactions);
+// ✅ ANALYTICS
+router.get("/analytics", getExpenseAnalytics);
 
-//delete
-router.delete('/:id',deleteTransaction)
+// ✅ CREATE
+router.post("/", transactionValidator, validate, createTransaction);
 
-router.get("/analytics", authMiddleware,getExpenseAnalytics);
+// ✅ GET ALL (filters + search + pagination)
+router.get("/", getTransactions);
 
+// ✅ UPDATE
+router.put("/:id", updateTransaction);
 
-export default router
+// ✅ DELETE
+router.delete("/:id", deleteTransaction);
+
+export default router;

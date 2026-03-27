@@ -13,17 +13,19 @@ import {
   HelpCircleIcon,
   Logout01Icon,
 } from "@hugeicons/core-free-icons";
+import { useRouter, usePathname } from "next/navigation";
 
 import Image from "next/image";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function Sidebar() {
-  const [activeItem, setActiveItem] = useState("dashboard");
+  const router = useRouter();
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
 
-  const handleClick = (item: string) => {
-    setActiveItem(item);
+  const handleClick = (path: string) => {
+    router.push(path);
     setOpen(false);
   };
 
@@ -98,7 +100,6 @@ export default function Sidebar() {
           }
         `}
       >
-        {/* Inner wrapper (padding fix) */}
         <div className="flex flex-col h-full px-2 md:px-0">
 
           {/* Logo */}
@@ -134,32 +135,32 @@ export default function Sidebar() {
               <SidebarItem
                 icon={DashboardSquare02Icon}
                 label="Dashboard"
-                active={activeItem === "dashboard"}
-                onClick={() => handleClick("dashboard")}
+                active={pathname === "/dashboard"}
+                onClick={() => handleClick("/dashboard")}
               />
               <SidebarItem
                 icon={Task01Icon}
                 label="Transactions"
-                active={activeItem === "transactions"}
-                onClick={() => handleClick("transactions")}
+                active={pathname.startsWith("/transactions")}
+                onClick={() => handleClick("/transactions")}
               />
               <SidebarItem
                 icon={Calendar03Icon}
                 label="Calendar"
-                active={activeItem === "calendar"}
-                onClick={() => handleClick("calendar")}
+                active={pathname === "/calendar"}
+                onClick={() => handleClick("/calendar")}
               />
               <SidebarItem
                 icon={Analytics01Icon}
                 label="Analytics"
-                active={activeItem === "analytics"}
-                onClick={() => handleClick("analytics")}
+                active={pathname === "/analytics"}
+                onClick={() => handleClick("/analytics")}
               />
               <SidebarItem
                 icon={UserGroupIcon}
                 label="Budgets"
-                active={activeItem === "budgets"}
-                onClick={() => handleClick("budgets")}
+                active={pathname === "/budgets"}
+                onClick={() => handleClick("/budgets")}
               />
             </nav>
 
@@ -174,19 +175,22 @@ export default function Sidebar() {
               <SidebarItem
                 icon={Settings01Icon}
                 label="Settings"
-                active={activeItem === "settings"}
-                onClick={() => handleClick("settings")}
+                active={pathname === "/settings"}
+                onClick={() => handleClick("/settings")}
               />
               <SidebarItem
                 icon={HelpCircleIcon}
                 label="Help"
-                active={activeItem === "help"}
-                onClick={() => handleClick("help")}
+                active={pathname === "/help"}
+                onClick={() => handleClick("/help")}
               />
               <SidebarItem
                 icon={Logout01Icon}
                 label="Logout"
-                onClick={() => setOpen(false)}
+                onClick={() => {
+                  localStorage.removeItem("token");
+                  router.push("/login");
+                }}
               />
             </nav>
           </div>

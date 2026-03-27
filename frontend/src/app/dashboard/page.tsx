@@ -1,13 +1,11 @@
 "use client";
 
-import Sidebar from "@/components/layout/Sidebar";
-import SearchHeader from "@/components/layout/SearchHeader";
+import DashboardWrapper from "@/components/layout/DashboardWrapper";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import DashboardMain from "@/components/dashboard/DashboardMain";
 
 const BASE_URL = "http://localhost:5000";
-
 
 type User = {
   name: string;
@@ -42,11 +40,7 @@ export default function DashboardPage() {
         }
 
         const data = await res.json();
-        console.log(data)
-
         setUser(data.user);
-
-        
       } catch (error) {
         console.error("Dashboard fetch error", error);
       } finally {
@@ -66,14 +60,8 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="flex gap-4 p-4 bg-zinc-950 min-h-screen">
-      <Sidebar />
-
-      <div className="flex-1 flex flex-col gap-4">
-        <SearchHeader user={user ?? undefined} />
-
-        <DashboardMain></DashboardMain>
-      </div>
-    </div>
+    <DashboardWrapper>
+      <DashboardMain />
+    </DashboardWrapper>
   );
 }

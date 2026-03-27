@@ -1,6 +1,9 @@
-import { Work_Sans } from "next/font/google";
+import { Work_Sans, Geist } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
+import { cn } from "@/lib/utils";
+
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 const workSans = Work_Sans({
   variable: "--font-work-sans",
@@ -18,7 +21,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={cn("font-sans", geist.variable)}>
         <body
         className={`${workSans.variable} antialiased`}
       >

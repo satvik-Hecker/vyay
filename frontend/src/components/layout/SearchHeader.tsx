@@ -15,15 +15,20 @@ type User = {
   email?: string;
 };
 
-type HeaderProps = {
-  user?: User;
-};
+export default function SearchHeader() {
+  const [query, setQuery] = useState("");
+    
+      const [user] = useState<User | null>(() => {
+      try {
+        const storedUser = localStorage.getItem("user");
+        return storedUser ? JSON.parse(storedUser) : null;
+      } catch {
+        return null;
+      }
+    });
 
-export default function SearchHeader({ user }: HeaderProps) {
   const name = user?.name ?? "Guest";
   const email = user?.email ?? "guest@vyay.app";
-
-  const [query, setQuery] = useState("");
 
   const avatar = `https://api.dicebear.com/9.x/micah/png?seed=${email}&size=64`;
 
@@ -90,7 +95,6 @@ export default function SearchHeader({ user }: HeaderProps) {
             className="rounded-full border border-zinc-700"
           />
 
-          {/* Hide text on small screens */}
           <div className="hidden md:block leading-tight">
             <p className="text-sm text-white font-medium">
               {name}

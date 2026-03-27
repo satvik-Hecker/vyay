@@ -1,5 +1,15 @@
 const BASE_URL = "http://localhost:5000";
 
+type User = {
+  id: string;
+  name: string;
+  email: string;
+};
+type LoginResponse = {
+  token: string;
+  user: User;
+};
+
 const getHeaders = () => {
   const token = localStorage.getItem("token");
 
@@ -36,7 +46,7 @@ export const api = {
     apiRequest("/auth/register", "POST", data),
 
   login: (data: unknown) =>
-    apiRequest<{ token: string }>("/auth/login", "POST", data),
+     apiRequest<LoginResponse>("/auth/login", "POST", data),
 
   getDashboard: () =>
     apiRequest("/dashboard"),
