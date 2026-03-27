@@ -55,6 +55,31 @@ export default function TransactionsPage() {
 
     fetchTransactions();
   }, [page]);
+  const handleDelete = async (id: string) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const res = await fetch(
+      `http://localhost:5000/transactions/${id}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (!res.ok) {
+      throw new Error("Failed to delete");
+    }
+
+      
+      setTransactions((prev) => prev.filter((t) => t._id !== id));
+
+    } catch (err) {
+      console.error("Delete error:", err);
+    }
+  };
 
   return (
     <DashboardWrapper>
@@ -164,7 +189,7 @@ export default function TransactionsPage() {
                         <Button size="icon" variant="ghost" className="hover:bg-white/10">
                           <Pencil className="h-4 w-4 text-gray-300" />
                         </Button>
-                        <Button size="icon" variant="ghost" className="hover:bg-red-500/10">
+                        <Button size="icon" variant="ghost" className="hover:bg-red-500/10" onClick={() => handleDelete(t._id)}>
                           <Trash2 className="h-4 w-4 text-red-400" />
                         </Button>
                       </div>
