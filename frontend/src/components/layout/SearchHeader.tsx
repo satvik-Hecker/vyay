@@ -8,7 +8,7 @@ import {
 } from "@hugeicons/core-free-icons";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 type User = {
   name?: string;
@@ -17,15 +17,25 @@ type User = {
 
 export default function SearchHeader() {
   const [query, setQuery] = useState("");
-    
-      const [user] = useState<User | null>(() => {
-      try {
-        const storedUser = localStorage.getItem("user");
-        return storedUser ? JSON.parse(storedUser) : null;
-      } catch {
-        return null;
+
+  const [user, setUser] = useState<User | null>(null);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+
+    try {
+      const storedUser = localStorage.getItem("user");
+      if (storedUser) {
+        setUser(JSON.parse(storedUser));
       }
-    });
+    } catch {
+      setUser(null);
+    }
+  }, []);
+
+  // Prevent hydration mismatch
+  if (!mounted) return null;
 
   const name = user?.name ?? "Guest";
   const email = user?.email ?? "guest@vyay.app";
@@ -33,18 +43,12 @@ export default function SearchHeader() {
   const avatar = `https://api.dicebear.com/9.x/micah/png?seed=${email}&size=64`;
 
   return (
-    <header className="w-full flex items-center justify-between gap-3 sm:gap-4 bg-zinc-900 px-3 sm:px-5 py-2 sm:py-3 rounded-xl font-sans backdrop-blur-xl
-          border border-white/5">
-      
+    <header className="w-full flex items-center justify-between gap-3 sm:gap-4 bg-zinc-900 px-3 sm:px-5 py-2 sm:py-3 rounded-xl font-sans backdrop-blur-xl border border-white/5">
+
       {/* 🔍 Search */}
       <div className="flex items-center gap-2 bg-zinc-800 px-3 sm:px-4 h-9 sm:h-10 rounded-full flex-1 max-w-full sm:max-w-md transition focus-within:ring-2 focus-within:ring-lime-500">
         
-        <HugeiconsIcon
-          icon={Search01Icon}
-          size={16}
-          strokeWidth={1.5}
-          color="#9ca3af"
-        />
+        <HugeiconsIcon icon={Search01Icon} size={16} strokeWidth={1.5} color="#9ca3af" />
 
         <input
           type="text"
@@ -58,30 +62,12 @@ export default function SearchHeader() {
       {/* 🔔 Right Section */}
       <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
         
-        {/* Messages */}
-        <button
-          aria-label="Messages"
-          className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center bg-zinc-800 rounded-full hover:bg-zinc-700 transition focus:outline-none focus:ring-2 focus:ring-lime-500"
-        >
-          <HugeiconsIcon
-            icon={Mail01Icon}
-            size={16}
-            strokeWidth={1.5}
-            color="#d4d4d8"
-          />
+        <button className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center bg-zinc-800 rounded-full hover:bg-zinc-700 transition">
+          <HugeiconsIcon icon={Mail01Icon} size={16} strokeWidth={1.5} color="#d4d4d8" />
         </button>
 
-        {/* Notifications */}
-        <button
-          aria-label="Notifications"
-          className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center bg-zinc-800 rounded-full hover:bg-zinc-700 transition focus:outline-none focus:ring-2 focus:ring-lime-500"
-        >
-          <HugeiconsIcon
-            icon={Notification03Icon}
-            size={16}
-            strokeWidth={1.5}
-            color="#d4d4d8"
-          />
+        <button className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center bg-zinc-800 rounded-full hover:bg-zinc-700 transition">
+          <HugeiconsIcon icon={Notification03Icon} size={16} strokeWidth={1.5} color="#d4d4d8" />
         </button>
 
         {/* 👤 Profile */}
