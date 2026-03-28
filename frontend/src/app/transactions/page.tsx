@@ -23,11 +23,40 @@ type Transaction = {
   note?: string;
   amount: number;
 };
+const CATEGORIES = [
+  "Salary",
+  "Freelance",
+  "Business",
+  "Investment",
+  "Gift",
+  "Pocket Money",
+  "Food & Dining",
+  "Groceries",
+  "Transport",
+  "Rent",
+  "Utilities",
+  "Shopping",
+  "Entertainment",
+  "Travel",
+  "Health",
+  "Education",
+  "Subscriptions",
+  "Other",
+];
 
 export default function TransactionsPage() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [editing, setEditing] = useState<Transaction | null>(null);
+  const [form, setForm] = useState({
+    category: "",
+    paymentMethod: "cash",
+    type: "expense",
+    note: "",
+    amount: 0,
+    transactionDate: "",
+  });
 
   useEffect(() => {
     const fetchTransactions = async () => {
@@ -80,6 +109,46 @@ export default function TransactionsPage() {
       console.error("Delete error:", err);
     }
   };
+      const handleUpdate = async () => {
+        if (!editing) return;
+
+        // 🔥 Validation (match backend)
+        if (!form.category || !form.type || !form.amount) {
+          alert("Please fill all required fields");
+          return;
+        }
+
+        if (form.amount <= 0) {
+          alert("Amount must be greater than 0");
+          return;
+        }
+
+        try {
+          const token = localStorage.getItem("token");
+
+          const res = await fetch(
+            `http://localhost:5000/transactions/${editing._id}`,
+            {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify(form),
+            }
+          );
+
+          const updated = await res.json();
+
+          setTransactions((prev) =>
+            prev.map((t) => (t._id === updated._id ? updated : t))
+          );
+
+          setEditing(null);
+        } catch (err) {
+          console.error("Update error:", err);
+        }
+      };
 
   return (
     <DashboardWrapper>
@@ -186,7 +255,22 @@ export default function TransactionsPage() {
                     {/* Actions */}
                     <TableCell className="px-6 py-4 text-right align-middle">
                       <div className="flex justify-end gap-2">
-                        <Button size="icon" variant="ghost" className="hover:bg-white/10">
+                        <Button
+                          size="icon"
+                          variant="ghost"
+                          className="hover:bg-white/10"
+                          onClick={() => {
+                            setEditing(t);
+                            setForm({
+                              category: t.category,
+                              paymentMethod: t.paymentMethod,
+                              type: t.type,
+                              note: t.note || "",
+                              amount: t.amount,
+                              transactionDate: t.transactionDate,
+                            });
+                          }}
+                        >
                           <Pencil className="h-4 w-4 text-gray-300" />
                         </Button>
                         <Button size="icon" variant="ghost" className="hover:bg-red-500/10" onClick={() => handleDelete(t._id)}>
@@ -200,6 +284,122 @@ export default function TransactionsPage() {
             </TableBody>
           </Table>
         </div>
+        {editing && (
+  <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+    <div className="bg-zinc-900 p-6 rounded-xl w-full max-w-md space-y-4 border border-white/10">
+
+      <h2 className="text-lg font-semibold text-white">
+        Edit Transaction
+      </h2>
+
+      {/* Category */}
+      <div className="space-y-1">
+        <label className="text-sm text-gray-400">Category</label>
+        <select
+  className="w-full p-2 rounded bg-zinc-800 text-white"
+  value={form.category}
+  onChange={(e) =>
+    setForm({ ...form, category: e.target.value })
+  }
+>
+  <option value="" disabled>
+    Select category
+  </option>
+
+  {CATEGORIES.map((cat) => (
+    <option key={cat} value={cat}>
+      {cat}
+    </option>
+  ))}
+</select>
+      </div>
+
+      {/* Type */}
+      <div className="space-y-1">
+        <label className="text-sm text-gray-400">Type</label>
+        <select
+          className="w-full p-2 rounded bg-zinc-800 text-white"
+          value={form.type}
+          onChange={(e) =>
+            setForm({ ...form, type: e.target.value as "income" | "expense" })
+          }
+        >
+          <option value="income">Income</option>
+          <option value="expense">Expense</option>
+        </select>
+      </div>
+
+      {/* Account */}
+      <div className="space-y-1">
+        <label className="text-sm text-gray-400">Account</label>
+        <select
+          className="w-full p-2 rounded bg-zinc-800 text-white"
+          value={form.paymentMethod}
+          onChange={(e) =>
+            setForm({ ...form, paymentMethod: e.target.value as "cash" | "bank" })
+          }
+        >
+          <option value="cash">Cash</option>
+          <option value="bank">Bank</option>
+        </select>
+      </div>
+
+      {/* Amount */}
+      <div className="space-y-1">
+        <label className="text-sm text-gray-400">Amount</label>
+        <input
+          type="number"
+          className="w-full p-2 rounded bg-zinc-800 text-white"
+          value={form.amount}
+          onChange={(e) =>
+            setForm({ ...form, amount: Number(e.target.value) })
+          }
+        />
+      </div>
+
+      {/* Date */}
+      <div className="space-y-1">
+        <label className="text-sm text-gray-400">Date</label>
+        <input
+          type="date"
+          className="w-full p-2 rounded bg-zinc-800 text-white"
+          value={form.transactionDate?.slice(0, 10)}
+          onChange={(e) =>
+            setForm({ ...form, transactionDate: e.target.value })
+          }
+        />
+      </div>
+
+      {/* Notes */}
+      <div className="space-y-1">
+        <label className="text-sm text-gray-400">Notes</label>
+        <input
+          className="w-full p-2 rounded bg-zinc-800 text-white"
+          value={form.note}
+          onChange={(e) => setForm({ ...form, note: e.target.value })}
+        />
+      </div>
+
+      {/* Actions */}
+      <div className="flex justify-end gap-2 pt-2">
+        <button
+          onClick={() => setEditing(null)}
+          className="px-4 py-2 border border-white/10 rounded text-gray-300"
+        >
+          Cancel
+        </button>
+
+        <button
+          onClick={handleUpdate}
+          className="px-4 py-2 bg-lime-400 text-black rounded font-medium"
+        >
+          Save
+        </button>
+      </div>
+
+    </div>
+  </div>
+)}
 
         {/* Pagination */}
         <div className="flex items-center justify-between mt-4">

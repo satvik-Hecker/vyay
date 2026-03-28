@@ -180,7 +180,7 @@ export default function Sidebar() {
               />
               <SidebarItem
                 icon={HelpCircleIcon}
-                label="Help"
+                label="About Vyay"
                 active={pathname === "/help"}
                 onClick={() => handleClick("/help")}
               />
