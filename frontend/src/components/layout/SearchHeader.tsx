@@ -45,6 +45,8 @@ export default function SearchHeader() {
   return (
     <header className="w-full flex items-center justify-between gap-3 sm:gap-4 bg-zinc-900 px-3 sm:px-5 py-2 sm:py-3 rounded-xl font-sans backdrop-blur-xl border border-white/5">
 
+      
+
       {/* 🔍 Search */}
       <div className="flex items-center gap-2 bg-zinc-800 px-3 sm:px-4 h-9 sm:h-10 rounded-full flex-1 max-w-full sm:max-w-md transition focus-within:ring-2 focus-within:ring-lime-500">
         

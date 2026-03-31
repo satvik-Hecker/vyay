@@ -5,6 +5,7 @@ import StatCard from "./StatCard";
 import WeeklySpendingCard from "./WeeklySpends";
 import RecentTransactionsCard from "./RecentTrans";
 import CashBalanceCard from "./BalDistribution";
+import AddTransactionModal from "../AddTransactionModal";
 
 type DashboardResponse = {
   stats: {
