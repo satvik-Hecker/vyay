@@ -50,9 +50,26 @@ const aiPoints = [
 ];
 
 const steps = [
-  { num: "01", title: "Add Transactions", desc: "Log expenses manually or connect your accounts. Vyay auto-categorizes everything in real time." },
-  { num: "02", title: "Track Spending", desc: "Your dashboard updates instantly. Visual charts and breakdowns make patterns obvious at a glance." },
-  { num: "03", title: "Get Insights", desc: "Vyay's AI surfaces what matters — alerts, savings opportunities, and personalized recommendations." },
+  { 
+    num: "01", 
+    title: "On-Chain Identity", 
+    desc: "Create your secure account. Your identity and financial data are anchored with blockchain-level encryption from day one." 
+  },
+  { 
+    num: "02", 
+    title: "Secure CRUD Ops", 
+    desc: "Log and manage transactions with peace of mind. Every record is encrypted on an immutable ledger for total integrity." 
+  },
+  { 
+    num: "03", 
+    title: "Visual Intelligence", 
+    desc: "Access pro-grade analytics and transaction pages designed for maximum clarity and instant visual insights." 
+  },
+  { 
+    num: "04", 
+    title: "Consult Vy-AI", 
+    desc: "Chat with your personal finance strategist for hyper-personalized insights, savings tips, and real-time wealth advice." 
+  },
 ];
 
 const stats = [
@@ -256,37 +273,58 @@ export default function Home() {
         </div>
       </section>
 
-      {/* HOW IT WORKS */}
-      <section id="how" className="px-6 md:px-12 lg:px-20 py-20 md:py-28 border-t border-[rgba(255,255,255,0.07)]">
-        <div className="max-w-[1260px] mx-auto">
-          <div className="fade-up text-center mb-14">
-            <div className="text-[#a3e635] text-xs font-bold tracking-[0.14em] uppercase mb-3">How it works</div>
-            <h2 className="font-['Syne',sans-serif] text-3xl md:text-4xl font-extrabold tracking-tight mb-4">
-              Three steps to financial clarity
-            </h2>
-            <p className="text-[#a1a1aa] text-base font-light max-w-[480px] mx-auto leading-relaxed">
-              Getting started takes under two minutes. No spreadsheets. No complexity.
-            </p>
-          </div>
-          <div className="steps-grid grid grid-cols-1 md:grid-cols-3 gap-6 relative">
-            <div className="absolute top-8 left-[16.67%] right-[16.67%] h-px bg-[linear-gradient(90deg,transparent,rgba(163,230,53,0.3),transparent)] hidden md:block" />
-            {steps.map((s) => (
-              <div key={s.num} className="fade-up bg-[#111113] border border-[rgba(255,255,255,0.07)] rounded-2xl p-8 transition-all hover:-translate-y-1 hover:border-[rgba(163,230,53,0.2)]">
-                <div className="font-['Syne',sans-serif] text-[2.5rem] font-extrabold text-[rgba(163,230,53,0.15)] tracking-tight leading-none mb-4">
-                  {s.num}
-                </div>
-                <h3 className="font-['Syne',sans-serif] text-lg font-bold mb-2">{s.title}</h3>
-                <p className="text-[#a1a1aa] text-sm font-light leading-relaxed">{s.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <section id="how" className="px-6 md:px-12 lg:px-20 py-18 md:py-20 border-t border-[rgba(255,255,255,0.07)]">
+  <div className="max-w-315 mx-auto">
+    <div className="fade-up text-center mb-14">
+      <div className="text-[#a3e635] text-xs font-bold tracking-[0.14em] uppercase mb-3">The Protocol</div>
+      <h2 className="font-['Syne',sans-serif] text-3xl md:text-4xl font-extrabold tracking-tight mb-4">
+        Four steps to <span className="text-[#a3e635]">absolute</span> clarity
+      </h2>
+      <p className="text-[#a1a1aa] text-base font-light max-w-120 mx-auto leading-relaxed">
+        From secure account creation to AI-powered wealth strategy in minutes.
+      </p>
+    </div>
 
+    {/* STEPS GRID */}
+    <div className="steps-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative">
+      {/* Connector Line for Desktop */}
+      <div className="absolute top-12 left-[10%] right-[10%] h-px bg-[linear-gradient(90deg,transparent,rgba(163,230,53,0.2),transparent)] hidden lg:block" />
+      
+      {steps.map((s) => (
+        <div 
+          key={s.num} 
+          className="fade-up group bg-[#111113] border border-[rgba(255,255,255,0.05)] rounded-2xl p-8 transition-all duration-500 hover:-translate-y-2 hover:border-[#a3e635]/30 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.7)]"
+        >
+          {/* Step Number with Neon Glow on Hover */}
+          <div className="font-['Syne',sans-serif] text-[2.5rem] font-extrabold text-[rgba(163,230,53,0.1)] tracking-tight leading-none mb-6 group-hover:text-[#a3e635] group-hover:drop-shadow-[0_0_10px_rgba(163,230,53,0.4)] transition-all duration-500">
+            {s.num}
+          </div>
+          
+          <h3 className="font-['Syne',sans-serif] text-xl font-bold mb-3 text-[#f4f4f5] group-hover:text-[#a3e635] transition-colors">
+            {s.title}
+          </h3>
+          
+          <p className="text-[#52525b] group-hover:text-[#a1a1aa] text-sm font-light leading-relaxed transition-colors">
+            {s.desc}
+          </p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+      
       {/* STATS */}
-      {/* STATS */}
-      <section id="stats" className="px-6 md:px-12 lg:px-20 py-20 md:py-28 border-t border-[rgba(255,255,255,0.07)]">
+      <section id="stats" className="px-6 md:px-12 lg:px-18 py-18 md:py-20 border-t border-[rgba(255,255,255,0.07)]">
         <div className="max-w-315 mx-auto">
+          <div className="fade-up text-center mb-16">
+      <h2 className="font-['Syne',sans-serif] text-3xl md:text-4xl font-extrabold tracking-tight mb-4">
+        Built for <span className="text-[#a3e635]">performance</span>.
+      </h2>
+      <p className="text-[#a1a1aa] text-base font-light max-w-[500px] mx-auto leading-relaxed">
+        Technical benchmarks that power a secure and intelligent financial ecosystem.
+      </p>
+    </div>
           <div className="stats-grid grid grid-cols-2 lg:grid-cols-4 gap-6 text-center">
             {stats.map((s) => (
               <div 
