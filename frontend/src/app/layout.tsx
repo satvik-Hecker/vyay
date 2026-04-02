@@ -1,4 +1,4 @@
-import { Work_Sans, Geist } from "next/font/google";
+import { Work_Sans, Geist, Syne } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
 import { cn } from "@/lib/utils";
@@ -8,6 +8,12 @@ const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 const workSans = Work_Sans({
   variable: "--font-work-sans",
   subsets: ["latin"],
+});
+
+const syne = Syne({
+  variable: "--font-syne",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
 });
 
 export const metadata: Metadata = {
@@ -21,7 +27,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={cn("font-sans", geist.variable)}>
+    <html lang="en" className={cn("font-sans", geist.variable, syne.variable)}>
         <body
         className={`${workSans.variable} antialiased`}
       >

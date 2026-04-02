@@ -18,7 +18,7 @@ const navLinks = [
   { label: "Features", href: "#features" },
   { label: "The Core", href: "#core" },
   { label: "How it works", href: "#how" },
-  { label: "Security", href: "#security" },
+  
 ];
 
 const features = [
@@ -80,7 +80,8 @@ const stats = [
   { num: "-80%", label: "Manual Entry", sub: "Significant reduction in repetitive data input." },
 ];
 
-const sparkBars = [35, 55, 40, 70, 45, 88, 60];
+
+
 
 export default function Home() {
   const navRef = useRef<HTMLElement>(null);
@@ -118,10 +119,7 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-[#09090b] text-[#f4f4f5] font-sans overflow-x-hidden">
-      <link
-        href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap"
-        rel="stylesheet"
-      />
+     
 
       {/* NAV */}
       <nav
@@ -184,23 +182,55 @@ export default function Home() {
         <div className="absolute -bottom-24 -right-24 w-125 h-125 rounded-full bg-[radial-gradient(circle,rgba(163,230,53,0.04),transparent_70%)] pointer-events-none" />
         <div className="max-w-315 mx-auto w-full grid lg:grid-cols-2 gap-16 items-center">
           <div>
-            <div className="fade-up inline-flex items-center gap-2 bg-[rgba(163,230,53,0.08)] border border-[rgba(163,230,53,0.2)] text-[#a3e635] px-4 py-1.5 rounded-full text-xs font-semibold tracking-widest uppercase mb-6">
-              <span className="w-1.5 h-1.5 bg-[#a3e635] rounded-full animate-[pulse_2s_infinite]" />
-              AI-Powered Finance
+            <div className="relative inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full text-xs font-bold tracking-[0.15em] uppercase text-lime-400 bg-lime-400/10 backdrop-blur-xl border border-lime-400/20 shadow-[0_0_15px_rgba(163,230,53,0.15)] hover:shadow-[0_0_25px_rgba(163,230,53,0.3)] transition-shadow duration-300 mb-6 cursor-default">
+  
+            {/* Modern Radar-Ping Dot */}
+            <div className="relative flex h-2 w-2 items-center justify-center shrink-0">
+              <span className="absolute inline-flex h-full w-full rounded-full bg-lime-400 opacity-60 animate-ping" />
+              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-lime-400 shadow-[0_0_8px_rgba(163,230,53,1)]" />
             </div>
-            <h1 className="fade-up font-['Syne',sans-serif] text-4xl md:text-5xl lg:text-6xl font-extrabold leading-[1.1] tracking-tight text-[#f4f4f5] mb-5">
+            
+            <span className="relative z-10 drop-shadow-[0_0_8px_rgba(163,230,53,0.3)]">
+              AI-Powered Finance
+            </span>
+          </div>
+            <h1 className="fade-up font-syne text-4xl md:text-5xl lg:text-6xl font-extrabold leading-[1.1] tracking-tight text-[#f4f4f5] mb-5">
               Understand Your Money.<br /><em className="not-italic text-[#a3e635]">Effortlessly.</em>
             </h1>
             <p className="fade-up text-[#a1a1aa] text-base md:text-lg max-w-105 leading-relaxed font-light mb-10">
               Track expenses, analyze spending, and get AI-powered financial insights — all in one beautifully simple app.
             </p>
             <div className="fade-up flex gap-4 flex-wrap">
-              <a href="#cta" className="bg-[#a3e635] text-[#09090b] border-none py-3 px-8 rounded-full text-base font-semibold no-underline inline-block hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(163,230,53,0.3)] transition-all">
-                Get Started
-              </a>
-              <a href="#ai" className="bg-transparent text-[#f4f4f5] border border-[rgba(255,255,255,0.07)] py-3 px-8 rounded-full text-base font-medium no-underline inline-block hover:border-white/20 hover:bg-white/3 transition-all">
-                View Demo
-              </a>
+              <Link href="/register">
+            <Button
+              className="relative px-8 py-6 rounded-full text-md font-semibold cursor-pointer transition-all duration-300 bg-[#a3e635] text-[#09090b] border-none
+              /* 3D Depth & Internal Lighting */
+              shadow-[inset_0_2px_4px_rgba(255,255,255,0.6),inset_0_-4px_6px_rgba(0,0,0,0.2),0_10px_20px_-5px_rgba(163,230,53,0.4)] 
+              /* Hover Effects */
+              hover:scale-105 
+              hover:shadow-[0_0_30px_rgba(163,230,53,0.6),inset_0_2px_2px_rgba(255,255,255,0.8)]
+              /* Active/Press Effect */
+              active:scale-95 active:shadow-[inset_0_4px_8px_rgba(0,0,0,0.3)]"
+            >
+              Start Tracking
+            </Button>
+            </Link>
+              <Link href="#features">
+            <Button
+              className="relative px-8 py-6 rounded-full text-md font-medium cursor-pointer transition-all duration-300 
+              bg-[#111113] text-[#f4f4f5] border border-[rgba(255,255,255,0.07)]
+              /* 3D Depth for Dark Button */
+              shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),inset_0_-2px_4px_rgba(0,0,0,0.6),0_10px_20px_-5px_rgba(0,0,0,0.5)]
+              /* Hover Effects */
+              hover:scale-105 
+              hover:border-white/20 hover:bg-[#161618]
+              hover:shadow-[0_0_20px_rgba(255,255,255,0.05),inset_0_1px_1px_rgba(255,255,255,0.2)]
+              /* Active/Press Effect */
+              active:scale-95"
+            >
+              View Demo
+            </Button>
+          </Link>
             </div>
           </div>
           <div className="fade-up hidden lg:block animate-[float_6s_ease-in-out_infinite]">
@@ -214,7 +244,7 @@ export default function Home() {
         <div className="max-w-315 mx-auto">
           <div className="fade-up text-center mb-14">
             <div className="text-[#a3e635] text-xs font-bold tracking-[0.14em] uppercase mb-3">Features</div>
-            <h2 className="font-['Syne',sans-serif] text-3xl md:text-4xl font-extrabold tracking-tight mb-4">
+            <h2 className="font-syne text-3xl md:text-4xl font-extrabold tracking-tight mb-4">
               Everything you need to master your finances
             </h2>
             <p className="text-[#a1a1aa] text-base font-light max-w-120 mx-auto leading-relaxed">
@@ -235,7 +265,7 @@ export default function Home() {
         <div className="max-w-315 mx-auto grid lg:grid-cols-2 gap-20 items-center relative">
           <div className="fade-up">
             <div className="text-[#a3e635] text-xs font-bold tracking-[0.14em] uppercase mb-3">AI Assistant</div>
-            <h2 className="font-['Syne',sans-serif] text-3xl md:text-4xl font-extrabold tracking-tight mb-4">
+            <h2 className="font-syne text-3xl md:text-4xl font-extrabold tracking-tight mb-4">
               Your money, finally explained.
             </h2>
             <p className="text-[#a1a1aa] text-base font-light leading-relaxed mb-8">
@@ -277,7 +307,7 @@ export default function Home() {
           <div className="text-lime-400 text-xs md:text-sm font-bold tracking-[0.15em] uppercase mb-4">
             Dashboard
           </div>
-          <h2 className="font-['Syne',sans-serif] text-3xl md:text-5xl  font-extrabold tracking-tight text-white mb-6">
+          <h2 className="font-syne text-3xl md:text-5xl  font-extrabold tracking-tight text-white mb-6">
             Your finances at a glance
           </h2>
           <p className="text-zinc-400 text-base   font-light max-w-2xl mx-auto leading-relaxed">
@@ -306,7 +336,7 @@ export default function Home() {
   <div className="max-w-315 mx-auto">
     <div className="fade-up text-center mb-14">
       <div className="text-[#a3e635] text-xs font-bold tracking-[0.14em] uppercase mb-3">The Protocol</div>
-      <h2 className="font-['Syne',sans-serif] text-3xl md:text-4xl font-extrabold tracking-tight mb-4">
+      <h2 className="font-syne text-3xl md:text-4xl font-extrabold tracking-tight mb-4">
         Four steps to <span className="text-[#a3e635]">absolute</span> clarity
       </h2>
       <p className="text-[#a1a1aa] text-base font-light max-w-120 mx-auto leading-relaxed">
@@ -325,11 +355,11 @@ export default function Home() {
           className="fade-up group bg-[#111113] border border-[rgba(255,255,255,0.05)] rounded-2xl p-8 transition-all duration-500 hover:-translate-y-2 hover:border-[#a3e635]/30 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.7)]"
         >
           {/* Step Number with Neon Glow on Hover */}
-          <div className="font-['Syne',sans-serif] text-[2.5rem] font-extrabold text-[rgba(163,230,53,0.1)] tracking-tight leading-none mb-6 group-hover:text-[#a3e635] group-hover:drop-shadow-[0_0_10px_rgba(163,230,53,0.4)] transition-all duration-500">
+          <div className="font-syne text-[2.5rem] font-extrabold text-[rgba(163,230,53,0.1)] tracking-tight leading-none mb-6 group-hover:text-[#a3e635] group-hover:drop-shadow-[0_0_10px_rgba(163,230,53,0.4)] transition-all duration-500">
             {s.num}
           </div>
           
-          <h3 className="font-['Syne',sans-serif] text-xl font-bold mb-3 text-[#f4f4f5] group-hover:text-[#a3e635] transition-colors">
+          <h3 className="font-syne text-xl font-bold mb-3 text-[#f4f4f5] group-hover:text-[#a3e635] transition-colors">
             {s.title}
           </h3>
           
@@ -347,7 +377,7 @@ export default function Home() {
       <section id="stats" className="px-6 md:px-12 lg:px-18 py-18 md:py-20 border-t border-[rgba(255,255,255,0.07)]">
         <div className="max-w-315 mx-auto">
           <div className="fade-up text-center mb-16">
-      <h2 className="font-['Syne',sans-serif] text-3xl md:text-4xl font-extrabold tracking-tight mb-4">
+      <h2 className="font-syne text-3xl md:text-4xl font-extrabold tracking-tight mb-4">
         Built for <span className="text-[#a3e635]">performance</span>.
       </h2>
       <p className="text-[#a1a1aa] text-base font-light max-w-125 mx-auto leading-relaxed">
@@ -366,7 +396,7 @@ export default function Home() {
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(163,230,53,0.03),transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity" />
                 
                 <div className="relative">
-                  <div className="font-['Syne',sans-serif] text-3xl md:text-5xl font-extrabold text-[#a3e635] tracking-tight drop-shadow-[0_0_15px_rgba(163,230,53,0.3)]">
+                  <div className="font-syne text-3xl md:text-5xl font-extrabold text-[#a3e635] tracking-tight drop-shadow-[0_0_15px_rgba(163,230,53,0.3)]">
                     {s.num}
                   </div>
                   <div className="text-[#52525b] group-hover:text-[#a1a1aa] text-xs md:text-sm mt-2 uppercase tracking-widest font-bold transition-colors">
@@ -381,12 +411,12 @@ export default function Home() {
 
       {/* CTA */}
       <section id="cta" className="px-6 md:px-12 lg:px-20 py-20 md:py-28 border-t border-[rgba(255,255,255,0.07)] text-center relative overflow-hidden bg-[radial-gradient(ellipse_at_center,rgba(163,230,53,0.06),transparent_70%)]">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-['Syne',sans-serif] text-[8rem] md:text-[18rem] font-extrabold text-[rgba(163,230,53,0.025)] tracking-tight leading-none whitespace-nowrap pointer-events-none select-none">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-syne text-[8rem] md:text-[18rem] font-extrabold text-[rgba(163,230,53,0.025)] tracking-tight leading-none whitespace-nowrap pointer-events-none select-none">
           VYAY
         </div>
         <div className="max-w-160 mx-auto relative">
           <div className="fade-up text-[#a3e635] text-xs font-bold tracking-[0.14em] uppercase mb-3">Join Vyay</div>
-          <h2 className="fade-up font-['Syne',sans-serif] text-3xl md:text-5xl font-extrabold tracking-tight leading-[1.1] mb-4">
+          <h2 className="fade-up font-syne text-3xl md:text-5xl font-extrabold tracking-tight leading-[1.1] mb-4">
             The Future of Finance
           </h2>
           <p className="fade-up text-[#a1a1aa] text-base font-light leading-relaxed mb-10">
@@ -466,52 +496,115 @@ export default function Home() {
 }
 
 function HeroDashboard() {
+  const sparkBars = [35, 55, 40, 70, 45, 88, 60];
+
   const transactions = [
-    { icon: "🍜", bg: "rgba(251,146,60,.12)", name: "Swiggy Order", cat: "Food · Today", amount: "−₹340", type: "debit" },
-    { icon: "💰", bg: "rgba(34,197,94,.1)", name: "Salary Credit", cat: "Income · Mar 28", amount: "+₹85,000", type: "credit" },
-    { icon: "🛍️", bg: "rgba(139,92,246,.1)", name: "Amazon", cat: "Shopping · Mar 26", amount: "−₹1,299", type: "debit" },
-    { icon: "✈️", bg: "rgba(59,130,246,.1)", name: "IndiGo Flight", cat: "Travel · Mar 25", amount: "−₹4,200", type: "debit" },
+    { 
+      id: 1,
+      icon: <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 21v-7.5a.75.75 0 01.75-.75h3a.75.75 0 01.75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349m-16.5 11.65V9.35m0 0a3.001 3.001 0 003.75-.615A2.999 2.999 0 009.75 9.75c.896 0 1.7-.393 2.25-1.016a2.999 2.999 0 002.25 1.016c.896 0 1.7-.393 2.25-1.016a3.001 3.001 0 003.75.614m-16.5 0a3.004 3.004 0 01-.621-4.72L4.318 3.44A1.5 1.5 0 015.378 3h13.243a1.5 1.5 0 011.06.44l1.19 1.189a3 3 0 01-.621 4.72m-13.5 8.65h3.75a.75.75 0 00.75-.75V13.5a.75.75 0 00-.75-.75H6.75a.75.75 0 00-.75.75v3.75c0 .415.336.75.75.75z" />,
+      bg: "bg-orange-500/10", 
+      iconColor: "stroke-orange-500",
+      name: "Swiggy Order", 
+      cat: "Food · Today", 
+      amount: "−₹340", 
+      type: "debit" 
+    },
+    { 
+      id: 2,
+      icon: <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V5.25c0-.754-.726-1.294-1.453-1.096a60.07 60.07 0 01-15.797 2.101c-.727.198-1.453-.342-1.453-1.096V18.75c0 .754.726 1.294 1.453 1.096zM12 13.5a3 3 0 100-6 3 3 0 000 6z" />,
+      bg: "bg-lime-500/10", 
+      iconColor: "stroke-lime-500",
+      name: "Salary Credit", 
+      cat: "Income · Mar 28", 
+      amount: "+₹85,000", 
+      type: "credit" 
+    },
+    { 
+      id: 3,
+      icon: <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />,
+      bg: "bg-purple-500/10", 
+      iconColor: "stroke-purple-500",
+      name: "Amazon Prime", 
+      cat: "Shopping · Mar 26", 
+      amount: "−₹1,299", 
+      type: "debit" 
+    },
+    { 
+      id: 4,
+      icon: <path strokeLinecap="round" strokeLinejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />,
+      bg: "bg-blue-500/10", 
+      iconColor: "stroke-blue-500",
+      name: "IndiGo Flight", 
+      cat: "Travel · Mar 25", 
+      amount: "−₹4,200", 
+      type: "debit" 
+    },
   ];
 
   return (
-    <div className="bg-[#111113] border border-[rgba(255,255,255,0.07)] rounded-2xl p-6 shadow-[0_40px_80px_rgba(0,0,0,0.5),0_0_0_1px_rgba(255,255,255,0.07)]">
+    <div className="bg-zinc-900/40 backdrop-blur-2xl border border-white/10 rounded-3xl p-6 shadow-[0_40px_80px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.1)] relative">
+      
+      {/* Header */}
       <div className="flex items-center justify-between mb-5">
-        <span className="font-['Syne',sans-serif] text-xs font-bold text-[#a1a1aa] tracking-widest uppercase">Overview</span>
-        <span className="text-xs text-[#52525b] bg-[#161618] px-3 py-1 rounded-full border border-[rgba(255,255,255,0.07)]">March 2026</span>
+        <span className="font-syne text-xs font-bold text-zinc-400 tracking-[0.15em] uppercase">Overview</span>
+        <span className="text-xs text-zinc-300 bg-zinc-800/80 backdrop-blur-md px-3 py-1 rounded-full border border-white/5">
+          March 2026
+        </span>
       </div>
-      <div className="bg-[linear-gradient(135deg,rgba(163,230,53,0.1),rgba(163,230,53,0.03))] border border-[rgba(163,230,53,0.15)] rounded-xl p-5 mb-5">
-        <div className="text-[10px] text-[#52525b] tracking-[0.07em] uppercase mb-2">Total Balance</div>
-        <div className="font-['Syne',sans-serif] text-2xl font-extrabold tracking-tight">₹1,24,850</div>
-        <div className="text-xs text-[#a3e635] mt-1">↑ 8.3% from last month</div>
+
+      {/* Balance Card */}
+      <div className="bg-linear-to-br from-lime-400/10 to-lime-400/5 border border-lime-400/20 rounded-2xl p-5 mb-5 relative overflow-hidden">
+        {/* Subtle internal glow */}
+        <div className="absolute -right-4 -top-4 w-24 h-24 bg-lime-400/20 blur-2xl rounded-full pointer-events-none" />
+        
+        <div className="text-[10px] text-zinc-400 tracking-widest uppercase mb-1.5 relative z-10">Total Balance</div>
+        <div className="font-syne text-3xl font-extrabold tracking-tight text-white relative z-10">₹1,24,850</div>
+        <div className="text-xs text-lime-400 mt-1.5 font-medium relative z-10 flex items-center gap-1">
+          ↑ 8.3% from last month
+        </div>
       </div>
-      <div className="flex flex-col gap-2.5 mb-5">
+
+      {/* Transactions List */}
+      <div className="flex flex-col gap-2 mb-5">
         {transactions.map((t) => (
-          <div key={t.name} className="flex items-center gap-3.5 p-3 bg-[#161618] rounded-xl border border-[rgba(255,255,255,0.07)]">
-            <div className="w-8 h-8 rounded-lg flex items-center justify-center text-base shrink-0" style={{ background: t.bg }}>
-              {t.icon}
+          <div 
+            key={t.name} 
+            className="group flex items-center gap-3.5 p-3 bg-zinc-950/50 rounded-xl border border-white/5 hover:bg-zinc-800/50 hover:border-white/10 transition-colors cursor-pointer"
+          >
+            <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-transform group-hover:scale-110 group-hover:-rotate-3 ${t.bg}`}>
+              <svg className={`w-4 h-4 ${t.iconColor}`} fill="none" viewBox="0 0 24 24" strokeWidth="1.5">
+                {t.icon}
+              </svg>
             </div>
             <div className="flex-1 min-w-0">
-              <div className="text-xs font-medium truncate">{t.name}</div>
-              <div className="text-[10px] text-[#52525b]">{t.cat}</div>
+              <div className="text-xs font-semibold text-zinc-200 truncate group-hover:text-white transition-colors">{t.name}</div>
+              <div className="text-[10px] text-zinc-500 mt-0.5">{t.cat}</div>
             </div>
-            <div className={`font-['Syne',sans-serif] text-sm font-bold ${t.type === "debit" ? "text-red-400" : "text-[#a3e635]"}`}>
+            <div className={`font-syne text-sm font-bold tracking-tight ${t.type === "debit" ? "text-red-400" : "text-lime-400"}`}>
               {t.amount}
             </div>
           </div>
         ))}
       </div>
+
+      {/* Sparkline Bar Chart */}
       <div>
-        <div className="text-[10px] text-[#52525b] mb-2">Spending this week</div>
-        <div className="flex items-end gap-1 h-10">
+        <div className="text-[11px] font-medium text-zinc-500 mb-2.5 uppercase tracking-wider">Spending this week</div>
+        <div className="flex items-end gap-1.5 h-10">
           {sparkBars.map((h, i) => (
             <div
               key={i}
-              className={`flex-1 rounded-sm transition-colors cursor-pointer ${i === 5 ? "bg-[#a3e635]" : "bg-[rgba(163,230,53,0.15)] hover:bg-[rgba(163,230,53,0.4)]"}`}
+              className={`flex-1 rounded-t-sm transition-all cursor-pointer ${
+                i === 5 
+                  ? "bg-lime-400 shadow-[0_0_10px_rgba(163,230,53,0.5)]" 
+                  : "bg-lime-400/20 hover:bg-lime-400/40"
+              }`}
               style={{ height: `${h}%` }}
             />
           ))}
         </div>
       </div>
+
     </div>
   );
 }
@@ -520,7 +613,7 @@ function ChatMock() {
   return (
     <div className="bg-[#111113] border border-[rgba(163,230,53,0.15)] rounded-2xl p-6 shadow-[0_0_60px_rgba(163,230,53,0.07),0_40px_60px_rgba(0,0,0,0.4)]">
       <div className="flex items-center gap-3 pb-5 border-b border-[rgba(255,255,255,0.07)] mb-5">
-        <div className="w-8 h-8 rounded-full bg-[linear-gradient(135deg,#a3e635,#65a30d)] flex items-center justify-center font-['Syne',sans-serif] text-xs font-extrabold text-[#09090b]">
+        <div className="w-8 h-8 rounded-full bg-[linear-gradient(135deg,#a3e635,#65a30d)] flex items-center justify-center font-syne text-xs font-extrabold text-[#09090b]">
           V
         </div>
         <div>
@@ -544,12 +637,12 @@ function ChatMock() {
             <div className="flex gap-2 mt-3">
               <div className="bg-[#111113] border border-[rgba(255,255,255,0.07)] rounded-lg p-2 flex-1">
                 <div className="text-[10px]">🍜 Food</div>
-                <div className="font-['Syne',sans-serif] text-sm font-bold">₹4,200</div>
+                <div className="font-syne text-sm font-bold">₹4,200</div>
                 <div className="text-[10px] text-red-400">↑ 12% vs last month</div>
               </div>
               <div className="bg-[#111113] border border-[rgba(255,255,255,0.07)] rounded-lg p-2 flex-1">
                 <div className="text-[10px]">🛍️ Shopping</div>
-                <div className="font-['Syne',sans-serif] text-sm font-bold">₹2,800</div>
+                <div className="font-syne text-sm font-bold">₹2,800</div>
                 <div className="text-[10px] text-[#a3e635]">↓ 5% vs last month</div>
               </div>
             </div>
@@ -811,7 +904,7 @@ function FeatureCard({ icon, title, desc }: { icon: string; title: string; desc:
       <div className="w-11 h-11 bg-[rgba(163,230,53,0.1)] border border-[rgba(163,230,53,0.2)] rounded-xl flex items-center justify-center text-xl mb-5 relative">
         {icon}
       </div>
-      <h3 className="font-['Syne',sans-serif] text-lg font-bold mb-2 relative">{title}</h3>
+      <h3 className="font-syne text-lg font-bold mb-2 relative">{title}</h3>
       <p className="text-[#a1a1aa] text-sm font-light leading-relaxed relative">{desc}</p>
     </div>
   );
