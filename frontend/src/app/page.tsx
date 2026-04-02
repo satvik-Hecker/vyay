@@ -4,6 +4,14 @@ import { useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { IconSvgElement } from "@hugeicons/react";
+import { HugeiconsIcon } from "@hugeicons/react"; 
+import { Linkedin01Icon, Github01Icon } from "@hugeicons/core-free-icons";
+
+const footerLinks = [
+  { name: "GitHub", href: "https://github.com/satvik-Hecker", icon: Github01Icon },
+  { name: "LinkedIn", href: "https://linkedin.com/in/satvik04", icon: Linkedin01Icon },
+];
 
 const navLinks = [
   { label: "Features", href: "#features" },
@@ -48,10 +56,10 @@ const steps = [
 ];
 
 const stats = [
-  { num: "50K+", label: "Active Users" },
-  { num: "₹2Cr+", label: "Transactions Tracked" },
-  { num: "4.9★", label: "App Store Rating" },
-  { num: "18%", label: "Avg. Savings Gained" },
+  { num: "24/7", label: "AI Insights", sub: "Continuous pattern analysis & anomaly detection." },
+  { num: "0 %", label: "Tamper Risk", sub: "Immutable blockchain ledger ensures data integrity." },
+  { num: "<2s", label: "Sync Latency", sub: "Ultra-low delay between node propagation." },
+  { num: "-80%", label: "Manual Entry", sub: "Significant reduction in repetitive data input." },
 ];
 
 const monthlySpending = [45, 62, 38, 75, 55, 48, 68, 42, 80, 58, 65, 72];
@@ -138,7 +146,7 @@ export default function Home() {
             </li>
           ))}
         </ul>
-        <Link href="/register">
+        <Link href="#cta">
         <Button
           className="relative px-5 py-5 rounded-full text-md font-semibold cursor-pointer transition-all duration-300 bg-[#a3e635] text-[#09090b] border-none
           /* 3D Depth & Internal Lighting */
@@ -208,7 +216,7 @@ export default function Home() {
       {/* AI SECTION */}
       <section id="ai" className="px-6 md:px-12 lg:px-20 py-20 md:py-28 relative bg-[linear-gradient(180deg,transparent_0%,rgba(163,230,53,0.03)_30%,rgba(163,230,53,0.05)_50%,rgba(163,230,53,0.03)_70%,transparent_100%)] border-y border-[rgba(255,255,255,0.07)]">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-[radial-gradient(ellipse,rgba(163,230,53,0.06),transparent_70%)] pointer-events-none" />
-        <div className="max-w-[1260px] mx-auto grid lg:grid-cols-2 gap-20 items-center relative">
+        <div className="max-w-315 mx-auto grid lg:grid-cols-2 gap-20 items-center relative">
           <div className="fade-up">
             <div className="text-[#a3e635] text-xs font-bold tracking-[0.14em] uppercase mb-3">AI Assistant</div>
             <h2 className="font-['Syne',sans-serif] text-3xl md:text-4xl font-extrabold tracking-tight mb-4">
@@ -234,7 +242,7 @@ export default function Home() {
 
       {/* DASHBOARD PREVIEW */}
       <section id="dashboard" className="px-6 md:px-12 lg:px-20 py-20 md:py-28 border-t border-[rgba(255,255,255,0.07)]">
-        <div className="max-w-[1260px] mx-auto">
+        <div className="max-w-315 mx-auto">
           <div className="fade-up text-center mb-14">
             <div className="text-[#a3e635] text-xs font-bold tracking-[0.14em] uppercase mb-3">Dashboard</div>
             <h2 className="font-['Syne',sans-serif] text-3xl md:text-4xl font-extrabold tracking-tight mb-4">
@@ -276,13 +284,28 @@ export default function Home() {
       </section>
 
       {/* STATS */}
+      {/* STATS */}
       <section id="stats" className="px-6 md:px-12 lg:px-20 py-20 md:py-28 border-t border-[rgba(255,255,255,0.07)]">
-        <div className="max-w-[1260px] mx-auto">
-          <div className="stats-grid grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
+        <div className="max-w-315 mx-auto">
+          <div className="stats-grid grid grid-cols-2 lg:grid-cols-4 gap-6 text-center">
             {stats.map((s) => (
-              <div key={s.label} className="fade-up">
-                <div className="font-['Syne',sans-serif] text-3xl md:text-5xl font-extrabold text-[#a3e635] tracking-tight">{s.num}</div>
-                <div className="text-[#a1a1aa] text-sm mt-1">{s.label}</div>
+              <div 
+                key={s.label} 
+                className="fade-up group relative p-8 rounded-2xl bg-[#111113] border border-[rgba(255,255,255,0.03)] 
+                shadow-[inset_0_1px_1px_rgba(255,255,255,0.05),0_10px_30px_-10px_rgba(0,0,0,0.5)]
+                hover:border-[#a3e635]/20 hover:shadow-[0_0_30px_rgba(163,230,53,0.05)] transition-all duration-500"
+              >
+                {/* Subtle Glow behind the number */}
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(163,230,53,0.03),transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity" />
+                
+                <div className="relative">
+                  <div className="font-['Syne',sans-serif] text-3xl md:text-5xl font-extrabold text-[#a3e635] tracking-tight drop-shadow-[0_0_15px_rgba(163,230,53,0.3)]">
+                    {s.num}
+                  </div>
+                  <div className="text-[#52525b] group-hover:text-[#a1a1aa] text-xs md:text-sm mt-2 uppercase tracking-widest font-bold transition-colors">
+                    {s.label}
+                  </div>
+                </div>
               </div>
             ))}
           </div>
@@ -294,36 +317,78 @@ export default function Home() {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-['Syne',sans-serif] text-[8rem] md:text-[18rem] font-extrabold text-[rgba(163,230,53,0.025)] tracking-tight leading-none whitespace-nowrap pointer-events-none select-none">
           VYAY
         </div>
-        <div className="max-w-[640px] mx-auto relative">
-          <div className="fade-up text-[#a3e635] text-xs font-bold tracking-[0.14em] uppercase mb-3">Get started</div>
+        <div className="max-w-160 mx-auto relative">
+          <div className="fade-up text-[#a3e635] text-xs font-bold tracking-[0.14em] uppercase mb-3">Join Vyay</div>
           <h2 className="fade-up font-['Syne',sans-serif] text-3xl md:text-5xl font-extrabold tracking-tight leading-[1.1] mb-4">
-            Take control of your money today.
+            The Future of Finance
           </h2>
           <p className="fade-up text-[#a1a1aa] text-base font-light leading-relaxed mb-10">
-            Join 50,000+ users who&apos;ve transformed how they manage money.<br />Free to start. No credit card needed.
+            Experience the power of AI-driven insights and blockchain security. 
+            Start your journey toward true financial clarity today.
           </p>
           <div className="fade-up flex justify-center gap-4 flex-wrap">
-            <a href="#" className="bg-[#a3e635] text-[#09090b] border-none py-3 px-8 rounded-full text-base font-semibold no-underline inline-block hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(163,230,53,0.3)] transition-all">
-              Get Started Free
-            </a>
-            <a href="#features" className="bg-transparent text-[#f4f4f5] border border-[rgba(255,255,255,0.07)] py-3 px-8 rounded-full text-base font-medium no-underline inline-block hover:border-white/20 hover:bg-white/[0.03] transition-all">
+            <Link href="/register">
+            <Button
+              className="relative px-8 py-6 rounded-full text-md font-semibold cursor-pointer transition-all duration-300 bg-[#a3e635] text-[#09090b] border-none
+              /* 3D Depth & Internal Lighting */
+              shadow-[inset_0_2px_4px_rgba(255,255,255,0.6),inset_0_-4px_6px_rgba(0,0,0,0.2),0_10px_20px_-5px_rgba(163,230,53,0.4)] 
+              /* Hover Effects */
+              hover:scale-105 
+              hover:shadow-[0_0_30px_rgba(163,230,53,0.6),inset_0_2px_2px_rgba(255,255,255,0.8)]
+              /* Active/Press Effect */
+              active:scale-95 active:shadow-[inset_0_4px_8px_rgba(0,0,0,0.3)]"
+            >
+              Get Started
+            </Button>
+            </Link>
+              <Link href="#features">
+            <Button
+              className="relative px-8 py-6 rounded-full text-md font-medium cursor-pointer transition-all duration-300 
+              bg-[#111113] text-[#f4f4f5] border border-[rgba(255,255,255,0.07)]
+              /* 3D Depth for Dark Button */
+              shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),inset_0_-2px_4px_rgba(0,0,0,0.6),0_10px_20px_-5px_rgba(0,0,0,0.5)]
+              /* Hover Effects */
+              hover:scale-105 
+              hover:border-white/20 hover:bg-[#161618]
+              hover:shadow-[0_0_20px_rgba(255,255,255,0.05),inset_0_1px_1px_rgba(255,255,255,0.2)]
+              /* Active/Press Effect */
+              active:scale-95"
+            >
               Learn More
-            </a>
+            </Button>
+          </Link>
           </div>
         </div>
       </section>
 
       {/* FOOTER */}
       <footer className="px-6 md:px-12 lg:px-20 py-10 border-t border-[rgba(255,255,255,0.07)]">
-        <div className="max-w-[1260px] mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="font-['Syne',sans-serif] text-xl font-extrabold tracking-tight">
-            Vyay<span className="text-[#a3e635]">.</span>
+        <div className="max-w-315 mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="text-[16px] text-[#52525b]">
+            Made with ❤️ by Satvik
           </div>
-          <div className="text-[#52525b] text-xs">© 2026 Vyay. All rights reserved.</div>
-          <div className="flex gap-6">
-            {["GitHub", "Privacy", "Contact"].map((link) => (
-              <a key={link} href="#" className="text-[#52525b] text-xs hover:text-[#f4f4f5] transition-colors">
-                {link}
+          <div className="text-[#52525b] text-[16px]">© 2026 Vyay. All rights reserved.</div>
+          <div className="flex items-center gap-8">
+            {footerLinks.map((link) => (
+              <a
+                key={link.name}
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={link.name}
+                className="group flex items-center transition-all duration-300"
+              >
+                {link.icon ? (
+                  <HugeiconsIcon 
+                    icon={link.icon} // 
+                    size={28}  
+                    className="text-[#52525b] transition-all duration-300 group-hover:text-[#a3e635] group-hover:scale-110 group-hover:drop-shadow-[0_0_10px_rgba(163,230,53,0.5)]"
+                  />
+                ) : (
+                  <span className="text-[15px] text-[#52525b] hover:text-[#f4f4f5] transition-colors tracking-wide">
+                    {link.name}
+                  </span>
+                )}
               </a>
             ))}
           </div>
