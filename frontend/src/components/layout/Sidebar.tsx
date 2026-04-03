@@ -6,7 +6,7 @@ import type { IconSvgElement } from "@hugeicons/react";
 import {
   DashboardSquare02Icon,
   Task01Icon,
-  Calendar03Icon,
+  BotIcon,
   Analytics01Icon,
   UserGroupIcon,
   Settings01Icon,
@@ -145,10 +145,10 @@ export default function Sidebar() {
                 onClick={() => handleClick("/transactions")}
               />
               <SidebarItem
-                icon={Calendar03Icon}
-                label="Calendar"
-                active={pathname === "/calendar"}
-                onClick={() => handleClick("/calendar")}
+                icon={BotIcon}
+                label="Vy-AI"
+                active={pathname === "/vy-ai"}
+                onClick={() => handleClick("/vy-ai")}
               />
               <SidebarItem
                 icon={Analytics01Icon}
@@ -181,8 +181,8 @@ export default function Sidebar() {
               <SidebarItem
                 icon={HelpCircleIcon}
                 label="About Vyay"
-                active={pathname === "/help"}
-                onClick={() => handleClick("/help")}
+                active={pathname === "/"}
+                onClick={() => handleClick("/")}
               />
               <SidebarItem
                 icon={Logout01Icon}

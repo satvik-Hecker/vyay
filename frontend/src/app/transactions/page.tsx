@@ -181,7 +181,7 @@ export default function TransactionsPage() {
   // 5. Render
   return (
     <DashboardWrapper>
-      <div className="flex-1 bg-zinc-900/95 min-h-screen px-4 sm:px-6 lg:px-8 py-6 space-y-6 font-sans">
+      <div className="flex-1 rounded-2xl bg-zinc-900/95 min-h-screen px-4 sm:px-6 lg:px-8 py-6 space-y-6 font-sans">
         
         {/* --- Header & Primary Action --- */}
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -195,7 +195,7 @@ export default function TransactionsPage() {
         </div>
 
         <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
-          <Button className="px-4 py-6 rounded-lg bg-lime-400 text-black font-medium hover:opacity-90 transition" onClick={() => setOpen(true)}>
+          <Button className="px-4 py-6 rounded-lg bg-lime-400 text-black font-medium hover:bg-lime-600 transition" onClick={() => setOpen(true)}>
             + Add Transaction
           </Button>
         </div>
@@ -271,7 +271,7 @@ export default function TransactionsPage() {
           <div className="hidden md:block">
             <Table>
               <TableHeader className="sticky top-0 z-10">
-                <TableRow className="bg-lime-500 border-b border-lime-600">
+                <TableRow className="bg-lime-500 border-b border-lime-600 hover:bg-lime-500">
                   <TableHead className="px-6 py-4 text-black">Category</TableHead>
                   <TableHead className="px-6 py-4 text-black">Account</TableHead>
                   <TableHead className="px-6 py-4 text-black">Type</TableHead>
