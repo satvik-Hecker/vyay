@@ -71,7 +71,7 @@ export default function CashBalanceCard({ cash, bank }: Props) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
-      className="h-full flex flex-col bg-white/5 border border-white/10 rounded-xl p-5"
+      className="h-full flex flex-col bg-zinc-900 border border-white/10 rounded-xl p-5"
     >
       {/* Header */}
       <div className="flex justify-between items-center mb-3">

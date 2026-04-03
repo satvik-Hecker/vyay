@@ -84,7 +84,7 @@ export default function RecentTransactionsCard({
             return (
               <div
                 key={tx._id}
-                className="flex items-center justify-between gap-3 p-2 rounded-lg hover:bg-zinc-800/60 transition"
+                className="flex items-center justify-between gap-3 p-1 rounded-lg hover:bg-zinc-800/60 transition"
               >
                 {/* Left */}
                 <div className="flex items-center gap-3 min-w-0">
@@ -134,7 +134,7 @@ export default function RecentTransactionsCard({
 
       {/* Footer */}
       <Link href="/transactions">
-        <button className="mt-4 w-full text-sm text-zinc-400 hover:text-lime-400 transition">
+        <button className=" w-full text-sm text-zinc-400 hover:text-lime-400 transition">
           View All →
         </button>
       </Link>

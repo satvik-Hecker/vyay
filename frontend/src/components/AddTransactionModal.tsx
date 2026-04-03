@@ -160,6 +160,16 @@ export default function AddTransactionModal({
         toast.error("Not authenticated");
         return;
       }
+      const date = new Date(form.transactionDate);
+
+        date.setHours(new Date().getHours());
+        date.setMinutes(new Date().getMinutes());
+        date.setSeconds(new Date().getSeconds());
+
+        const payload = {
+          ...form,
+          transactionDate: date.toISOString(),
+        };
 
       const promise = fetch("http://localhost:5000/transactions", {
         method: "POST",
@@ -167,7 +177,7 @@ export default function AddTransactionModal({
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(form),
+        body: JSON.stringify(payload),
       });
 
       toast.promise(promise, {

@@ -75,9 +75,10 @@ export default function WeeklySpendingCard({ data }: Props) {
       </div>
     );
   }
+  const isAllZero = data.every((d)=> d.amount ===0 );
 
   return (
-    <div className="flex flex-col bg-white/5 border border-white/10 rounded-xl p-5">
+    <div className="flex flex-col bg-zinc-900 border border-white/10 rounded-xl p-5">
       
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
@@ -141,7 +142,7 @@ export default function WeeklySpendingCard({ data }: Props) {
             {/* Bars */}
             <Bar
               dataKey="displayAmount"
-              radius={[30, 30, 30, 30]}
+              radius={[20, 20, 20, 20]}
               isAnimationActive
             >
               {chartData.map((entry, index) => (

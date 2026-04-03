@@ -42,7 +42,7 @@ export default function StatCard({
         ${
           highlighted
             ? "bg-linear-to-br from-lime-400 via-lime-500 to-emerald-900 text-black shadow-[0_0_25px_rgba(132,204,22,0.35)] sm:shadow-[0_0_35px_rgba(132,204,22,0.45)]"
-            : "bg-white/5 border border-white/10 text-white backdrop-blur-sm"
+            : "bg-zinc-900 border border-white/10 text-white backdrop-blur-sm"
         }
       `}
     >

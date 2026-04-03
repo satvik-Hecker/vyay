@@ -5,7 +5,9 @@ import StatCard from "./StatCard";
 import WeeklySpendingCard from "./WeeklySpends";
 import RecentTransactionsCard from "./RecentTrans";
 import CashBalanceCard from "./BalDistribution";
-import AddTransactionModal from "../AddTransactionModal";
+import { CloudSync } from "lucide-react";
+
+
 
 type DashboardResponse = {
   stats: {
@@ -37,9 +39,13 @@ type DashboardResponse = {
   };
 };
 
+
+
 export default function DashboardMain() {
   const [data, setData] = useState<DashboardResponse | null>(null);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  
 
   const formatCurrency = (num: number) =>
     new Intl.NumberFormat("en-IN", {
@@ -48,27 +54,37 @@ export default function DashboardMain() {
       maximumFractionDigits: 0,
     }).format(num);
 
+    const fetchDashboard = async (isRefresh = false) => {
+  try {
+    if (isRefresh) {
+      setRefreshing(true);
+    } else {
+      setLoading(true);
+    }
+
+    const res = await fetch("http://localhost:5000/dashboard", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+
+    if (!res.ok) throw new Error("Failed");
+
+    const json: DashboardResponse = await res.json();
+    setData(json);
+  } catch (err) {
+    console.error(err);
+  } finally {
+    if (isRefresh) {
+      setRefreshing(false);
+    } else {
+      setLoading(false);
+    }
+  }
+};
+
   useEffect(() => {
-    const fetchDashboard = async () => {
-      try {
-        const res = await fetch("http://localhost:5000/dashboard", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
-
-        if (!res.ok) throw new Error("Failed");
-
-        const json: DashboardResponse = await res.json();
-        setData(json);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchDashboard();
+    fetchDashboard(false);
   }, []);
 
   if (loading) {
@@ -105,8 +121,14 @@ export default function DashboardMain() {
         </div>
 
         <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
-          <button className="px-4 py-2 rounded-lg bg-lime-400 text-black font-medium hover:opacity-90 transition">
-            + Add Transaction
+          <button
+            onClick={() => fetchDashboard(true)}
+            disabled={refreshing}
+            className="px-4 py-2 flex gap-2 items-center rounded-lg bg-lime-400 text-black font-medium 
+            hover:opacity-90 active:scale-95 transition disabled:opacity-50"
+          >
+            <CloudSync className={`w-5 h-5 ${refreshing ? "animate-spin" : ""}`} />
+            {refreshing ? "Refreshing..." : "Refresh"}
           </button>
 
           <button className="px-4 py-2 rounded-lg border border-white/10 text-white hover:bg-white/5 transition">
