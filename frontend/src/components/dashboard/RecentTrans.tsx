@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { Plus } from "lucide-react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import type { IconSvgElement } from "@hugeicons/react";
@@ -7,6 +8,8 @@ import {
   MoneyBag02Icon,
   Invoice03Icon,
 } from "@hugeicons/core-free-icons";
+import AddTransactionModal from "../AddTransactionModal";
+import Link from "next/link";
 
 type Transaction = {
   _id: string;
@@ -21,12 +24,13 @@ export default function RecentTransactionsCard({
 }: {
   transactions: Transaction[];
 }) {
+  const [open, setOpen] = useState(false);
+
   function formatTime(date: string) {
     const d = new Date(date);
     if (isNaN(d.getTime())) return "—";
 
     const now = new Date();
-
     const diff = Math.floor(
       (now.getTime() - d.getTime()) / (1000 * 60 * 60 * 24)
     );
@@ -46,28 +50,30 @@ export default function RecentTransactionsCard({
   }
 
   return (
-    <div className="h-full flex flex-col bg-white/5 border border-white/10 rounded-xl p-5">
+    <div className="h-full flex flex-col bg-zinc-900 border border-zinc-800 rounded-xl p-5">
 
       {/* Header */}
-      <div className="flex items-center justify-between mb-3">
-        <h2 className="text-base sm:text-lg font-semibold text-zinc-900 dark:text-white">
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-base sm:text-lg font-semibold text-white">
           Recent Transactions
         </h2>
 
-        <button className="p-2 rounded-full border border-zinc-800 bg-lime-500 text-black hover:bg-lime-600 active:scale-95 transition">
+        <button
+          onClick={() => setOpen(true)}
+          className="p-2 rounded-lg bg-lime-400 text-black hover:bg-lime-300 active:scale-95 transition"
+        >
           <Plus size={16} />
         </button>
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-y-auto pr-1 space-y-3 sm:space-y-4 scrollbar-thin">
-
+      <div className="flex-1 overflow-y-auto pr-1 space-y-3 scrollbar-thin">
         {transactions.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-10 text-center">
             <p className="text-sm text-zinc-500">
               No transactions yet
             </p>
-            <p className="text-xs text-zinc-400 mt-1">
+            <p className="text-xs text-zinc-600 mt-1">
               Start by adding your first one
             </p>
           </div>
@@ -78,15 +84,15 @@ export default function RecentTransactionsCard({
             return (
               <div
                 key={tx._id}
-                className="flex items-center justify-between gap-3 hover:bg-black/5  p-0.5 rounded-lg transition"
+                className="flex items-center justify-between gap-3 p-2 rounded-lg hover:bg-zinc-800/60 transition"
               >
                 {/* Left */}
                 <div className="flex items-center gap-3 min-w-0">
                   <div
-                    className={`p-2 rounded-full shrink-0 ${
+                    className={`p-2 rounded-lg shrink-0 ${
                       isIncome
-                        ? "bg-green-200/70 text-green-800"
-                        : "bg-red-200/70 text-red-800"
+                        ? "bg-lime-400/10 text-lime-400"
+                        : "bg-red-400/10 text-red-400"
                     }`}
                   >
                     <HugeiconsIcon
@@ -99,7 +105,7 @@ export default function RecentTransactionsCard({
                     />
                   </div>
 
-                  <p className="font-medium text-sm sm:text-base text-zinc-900 dark:text-white truncate">
+                  <p className="font-medium text-sm text-zinc-200 truncate">
                     {tx.category}
                   </p>
                 </div>
@@ -107,16 +113,16 @@ export default function RecentTransactionsCard({
                 {/* Right */}
                 <div className="text-right shrink-0">
                   <p
-                    className={`font-semibold text-sm sm:text-base ${
+                    className={`font-semibold text-sm ${
                       isIncome
-                        ? "text-green-700"
-                        : "text-red-700"
+                        ? "text-lime-400"
+                        : "text-red-400"
                     }`}
                   >
                     {isIncome ? "+" : "-"}₹{tx.amount}
                   </p>
 
-                  <p className="text-[11px] sm:text-xs text-zinc-500">
+                  <p className="text-[11px] text-zinc-500">
                     {formatTime(tx.transactionDate)}
                   </p>
                 </div>
@@ -127,9 +133,20 @@ export default function RecentTransactionsCard({
       </div>
 
       {/* Footer */}
-        <button className="w-full text-sm font-medium text-blue-600 hover:underline">
+      <Link href="/transactions">
+        <button className="mt-4 w-full text-sm text-zinc-400 hover:text-lime-400 transition">
           View All →
         </button>
+      </Link>
+
+      {/* Modal */}
+      <AddTransactionModal
+        open={open}
+        setOpen={setOpen}
+        onSuccess={() => {
+          // optional: refetch or handle outside
+        }}
+      />
     </div>
   );
 }
