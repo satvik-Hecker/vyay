@@ -80,12 +80,12 @@ function parseTransaction(text: string) {
 /* ---------- CONSTANTS ---------- */
 
 const EXPENSE_CATEGORIES = [
-  "Food & Dining","Groceries","Transport","Shopping","Entertainment",
-  "Travel","Health","Education","Bills","Subscriptions","Other"
+  "Food & Dining","Groceries","Transport", "Rent", "Utilities","Shopping","Entertainment",
+  "Travel","Health","Education","Subscriptions","Other"
 ];
 
 const INCOME_CATEGORIES = [
-  "Salary","Freelance","Business","Investment","Gift","Other"
+  "Salary","Pocket Money","Freelance","Business","Investment","Gift" ,"Other"
 ];
 
 /* ---------- COMPONENT ---------- */
@@ -203,7 +203,7 @@ export default function AddTransactionModal({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="max-w-275! w-[95vw] md:h-[62vh] sm:h-[100vh] bg-zinc-900 text-white border border-white/10 p-0 overflow-hidden rounded-xl">
+      <DialogContent className="max-w-275! w-[95vw] md:h-[62vh] sm:h-screen bg-zinc-900 text-white border border-white/10 p-0 overflow-hidden rounded-xl">
 
         <div className="flex flex-col h-full">
 

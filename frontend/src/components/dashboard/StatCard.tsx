@@ -10,7 +10,8 @@ import {
 type StatCardProps = {
   title: string;
   value: string;
-  change: number;
+  change?: number; 
+  subtitle?: string; 
   highlighted?: boolean;
 };
 
@@ -18,9 +19,11 @@ export default function StatCard({
   title,
   value,
   change,
+  subtitle,
   highlighted,
 }: StatCardProps) {
-  const isPositive = change >= 0;
+  
+  const isPositive = change !== undefined && change >= 0;
 
   const trendColor = highlighted
     ? isPositive
@@ -79,34 +82,41 @@ export default function StatCard({
       <h2
         className={`
           font-semibold tracking-tight
-          text-xl sm:text-2xl lg:text-3xl
+          text-xl sm:text-2xl lg:text-3xl 
           ${highlighted ? "text-black" : "text-white"}
         `}
       >
         {value}
       </h2>
 
-      {/* Bottom */}
-      <div className="flex items-center gap-1.5 sm:gap-2 mt-1">
-        <HugeiconsIcon
-          icon={isPositive ? ArrowUp01Icon : ArrowDown01Icon}
-          size={12}
-          className={trendColor}
-        />
+      {/* Bottom (Only render if we pass a change OR a subtitle) */}
+      {(change !== undefined || subtitle) && (
+        <div className="flex items-center gap-1.5 sm:gap-2 ">
+          {change !== undefined && (
+            <>
+              <HugeiconsIcon
+                icon={isPositive ? ArrowUp01Icon : ArrowDown01Icon}
+                size={12}
+                className={trendColor}
+              />
+              <p className={`text-xs sm:text-sm font-medium ${trendColor}`}>
+                {Math.abs(change)}%
+              </p>
+            </>
+          )}
 
-        <p className={`text-xs sm:text-sm font-medium ${trendColor}`}>
-          {Math.abs(change)}%
-        </p>
-
-        <p
-          className={`
-            text-[10px] sm:text-xs
-            ${highlighted ? "text-black/80" : "text-gray-400"}
-          `}
-        >
-          from last month
-        </p>
-      </div>
+          {subtitle && (
+            <p
+              className={`
+                text-base sm:text-sm
+                ${highlighted ? "text-black/80" : "text-gray-400"}
+              `}
+            >
+              {subtitle}
+            </p>
+          )}
+        </div>
+      )}
     </div>
   );
 }

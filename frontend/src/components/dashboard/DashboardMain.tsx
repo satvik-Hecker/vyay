@@ -143,22 +143,26 @@ export default function DashboardMain() {
           title="Total Balance"
           value={formatCurrency(data.stats.totalBalance)}
           change={data.stats.changes.balance}
+          subtitle="from last month"
           highlighted
         />
         <StatCard
           title="Monthly Income"
           value={formatCurrency(data.stats.income)}
           change={data.stats.changes.income}
+          subtitle="from last month"
         />
         <StatCard
           title="Monthly Expense"
           value={formatCurrency(data.stats.expense)}
           change={data.stats.changes.expense}
+          subtitle="from last month"
         />
         <StatCard
           title="Transactions"
           value={data.stats.transactions.toString()}
           change={data.stats.changes.transactions}
+          subtitle="from last month"
         />
       </div>
 
