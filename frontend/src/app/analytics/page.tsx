@@ -287,8 +287,8 @@ export default function AnalyticsPage() {
               </div>
 
               {/* Vyay AI Insights Card */}
-              {/* 3. FIXED AI CARD: h-fit prevents it from stretching, mt-6 keeps the button perfectly aligned */}
-              <div className="lg:col-span-2 p-5 sm:p-6 rounded-2xl bg-zinc-900 border border-white/5 flex flex-col relative overflow-hidden group h-fit">
+              
+              <div className="lg:col-span-2 p-5 sm:p-6 rounded-2xl bg-zinc-900 border border-white/5 flex flex-col gap-12 relative overflow-hidden group h-84">
                 
                 <div className="absolute -top-16 -right-16 w-40 h-40 bg-lime-400/10 blur-[80px] rounded-full group-hover:bg-lime-400/15 transition-colors duration-500 pointer-events-none" />
                 <div className="absolute -bottom-16 -left-16 w-32 h-32 bg-blue-500/5 blur-[60px] rounded-full pointer-events-none" />
@@ -309,16 +309,18 @@ export default function AnalyticsPage() {
                       </div>
                     </div>
                   </div>
-
-                  <div className="space-y-2">
-                    <p className={`text-xs font-bold uppercase tracking-[0.15em] ${insight?.color || "text-lime-400"}`}>
-                      {insight?.title || "Scanning patterns..."}
-                    </p>
-                    <p className="text-sm text-gray-400 leading-relaxed">
-                      {insight?.text || "Analyzing your spending behavior to give you personalized financial advice."}
-                    </p>
                   </div>
-                </div>
+
+                  <div>
+                    <div className="space-y-2">
+                      <p className={`text-xs font-bold uppercase tracking-[0.15em] ${insight?.color || "text-lime-400"}`}>
+                        {insight?.title || "Scanning patterns..."}
+                      </p>
+                      <p className="text-sm text-gray-400 leading-relaxed">
+                        {insight?.text || "Analyzing your spending behavior to give you personalized financial advice."}
+                      </p>
+                    </div>
+                  </div>
 
                 <Link 
                   href="/vy-ai"

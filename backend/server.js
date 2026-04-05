@@ -6,7 +6,7 @@ import transactionRoutes from './src/routes/transaction.routes.js'
 import authRoutes from "./src/routes/auth.routes.js"
 import { apiLimiter } from "./src/middlewares/rateLimit/apiLimiter.js";
 import dashboardRoutes from "./src/routes/dashboard.routes.js"
-import budgetRoutes from "./src/routes/budget.routes.js"
+import chatRoutes from "./src/routes/chat.routes.js"
 import analyticsRoutes from "./src/routes/analytics.routes.js"
 
 dotenv.config();
@@ -29,8 +29,8 @@ app.get("/",(req,res)=> {
 app.use('/transactions',apiLimiter,transactionRoutes );
 app.use('/auth',authRoutes);
 app.use("/dashboard", dashboardRoutes);
-app.use("/budgets", budgetRoutes);
 app.use("/analytics",analyticsRoutes)
+app.use("/chat",chatRoutes);
 
 app.listen(PORT,  () => {
   console.log(`vyay server running on ${PORT}`);

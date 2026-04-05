@@ -143,6 +143,35 @@ export const getDashboard = async (req, res) => {
     // 🔥 REAL TOTAL BALANCE
     const totalBalance = cash + bank;
 
+    //category breakdown
+    const categoryBreakdownResult = await Transaction.aggregate([
+      {
+        $match: { 
+          userId, 
+          type: "expense", 
+          transactionDate: { $gte: startOfThisMonth } 
+        },
+      },
+      {
+        $group: {
+          _id: "$category",
+          value: { $sum: "$amount" },
+        },
+      },
+      {
+        $sort: { value: -1 }, // Sort highest spend to lowest
+      },
+      {
+        $limit: 6, // Keep it small for the mini dashboard chart
+      }
+    ]);
+
+    // Format it to match the frontend expectations: { name, value }
+    const categoryBreakdown = categoryBreakdownResult.map((item) => ({
+      name: item._id || "Uncategorized",
+      value: item.value,
+    }));
+
     // ---------- RESPONSE ----------
     res.json({
       user,
@@ -177,6 +206,7 @@ export const getDashboard = async (req, res) => {
         type: tx.type,
         transactionDate: tx.transactionDate,
       })),
+      categoryBreakdown,
     });
   } catch (error) {
     console.error("Dashboard error:", error);

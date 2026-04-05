@@ -8,7 +8,6 @@ import {
   Task01Icon,
   BotIcon,
   Analytics01Icon,
-  MoneySafeIcon,
   Settings01Icon,
   HelpCircleIcon,
   Logout01Icon,
@@ -156,12 +155,7 @@ export default function Sidebar() {
                 active={pathname === "/analytics"}
                 onClick={() => handleClick("/analytics")}
               />
-              <SidebarItem
-                icon={MoneySafeIcon}
-                label="Budgets"
-                active={pathname === "/budgets"}
-                onClick={() => handleClick("/budgets")}
-              />
+              
             </nav>
 
             <div className="h-px bg-zinc-800 mx-4 md:mx-6 my-4" />

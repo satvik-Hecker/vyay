@@ -39,7 +39,7 @@ export default function StatCard({
         relative rounded-2xl 
         p-4 sm:p-5 
         flex flex-col justify-between 
-        min-h-32.5 sm:min-h-37.5
+        min-h-30 sm:min-h-32
         transition-all duration-200
         hover:scale-[1.02] sm:hover:scale-[1.03]
         ${

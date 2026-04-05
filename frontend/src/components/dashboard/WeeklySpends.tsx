@@ -75,7 +75,7 @@ export default function WeeklySpendingCard({ data }: Props) {
       </div>
     );
   }
-  const isAllZero = data.every((d)=> d.amount ===0 );
+  
 
   return (
     <div className="flex flex-col bg-zinc-900 border border-white/10 rounded-xl p-5">
@@ -88,7 +88,7 @@ export default function WeeklySpendingCard({ data }: Props) {
       </div>
 
       {/* Chart */}
-      <div className="relative h-32">
+      <div className="relative h-28">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={chartData}>
             

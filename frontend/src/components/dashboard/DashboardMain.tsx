@@ -6,6 +6,7 @@ import WeeklySpendingCard from "./WeeklySpends";
 import RecentTransactionsCard from "./RecentTrans";
 import CashBalanceCard from "./BalDistribution";
 import { CloudSync } from "lucide-react";
+import MiniCategoryCard from "./MiniCategory";
 
 
 
@@ -37,6 +38,10 @@ type DashboardResponse = {
     cash: number;
     bank: number;
   };
+  categoryBreakdown: {
+    name: string;
+    value: number;
+  }[];
 };
 
 
@@ -107,7 +112,7 @@ export default function DashboardMain() {
   }));
 
   return (
-    <div className="flex-1 rounded-2xl backdrop-blur-xl font-sans border border-white/5 px-4 sm:px-6 lg:px-8 py-6 space-y-6 bg-zinc-900/95 min-h-screen">
+    <div className="flex-1 rounded-2xl backdrop-blur-xl font-sans border border-white/5 px-4 sm:px-6 lg:px-8 py-6 space-y-6 bg-zinc-900/95 h-[calc(100vh-1.5rem)] md:h-[calc(100vh-2rem)]">
 
       {/* 🧭 Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -166,38 +171,36 @@ export default function DashboardMain() {
         />
       </div>
 
-      {/* 📊 MAIN GRID */}
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+      {/* 📊 MAIN BENTO GRID */}
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 sm:gap-6">
 
-        {/* Weekly Spending - spans 2 cols on desktop */}
-        <div className="lg:col-span-2">
-          <WeeklySpendingCard data={formattedWeeklyData} />
+        {/* Left Block (Spans 2 cols): Stacked Weekly & Category */}
+        <div className="lg:col-span-2 flex flex-col gap-2">
+          <div className="flex-1 w-full min-h-0">
+            <WeeklySpendingCard data={formattedWeeklyData} />
+          </div>
+          <div className="flex-1 w-full min-h-0">
+            <MiniCategoryCard categories={data.categoryBreakdown || []} />
+          </div>
         </div>
 
-        {/* Cash Balance */}
-        <div className="lg:col-span-1">
+        {/* Middle Block: Cash Balance */}
+        <div className="lg:col-span-1 h-full">
           <CashBalanceCard
             cash={data.cashVsBalance.cash}
             bank={data.cashVsBalance.bank}
           />
         </div>
 
-        {/* Recent Transactions */}
-        <div className="lg:col-span-1">
+        {/* Right Block: Recent Transactions */}
+        <div className="lg:col-span-1 h-full">
           <RecentTransactionsCard
             transactions={data.recentTransactions}
           />
         </div>
-      </div>
-      {/* 🔔 Reminders */}
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-        <div className="bg-white/5 border border-white/10 rounded-xl p-5">
-          <h3 className="text-white font-medium mb-2">Reminders</h3>
-          <p className="text-sm text-gray-400">
-            No upcoming reminders
-          </p>
-        </div>
+        
       </div>
     </div>
   );
 }
+   
