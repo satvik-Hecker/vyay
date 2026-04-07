@@ -1,7 +1,9 @@
 import { Work_Sans, Geist, Syne } from "next/font/google";
-import "./globals.css";
+// import "./globals.css";
+import "@/app/globals.css";
 import { Toaster } from "sonner";
 import { cn } from "@/lib/utils";
+import type { Metadata } from "next";
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 

@@ -1,5 +1,6 @@
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
+import crypto from 'crypto'
 import User from '../models/User.js'
 
 export const registerUser = async(userData)=>{
@@ -64,3 +65,38 @@ export const loginUser = async({email,password})=> {
         token,
     };
 };
+
+export const requestPasswordReset = async (email)=> {
+    const user = await User.findOne({email});
+    if(!user) {
+        return { message: "If an account exists with this email, a reset link has been sent."};
+    }
+
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    const hashedToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+
+    user.resetPasswordToken = hashedToken;
+    user.resetPasswordExpires = Date.now() + 3600000; // 1 hour expiry
+    await user.save();
+    return { resetToken, email };
+}
+
+export const resetPassword = async(token,newPassword)=> {
+    const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+
+    const user = await User.findOne({
+        resetPasswordToken: hashedToken,
+        resetPasswordExpires: { $gt: Date.now() }
+    });
+
+    if (!user) {
+        throw new Error("Token is invalid or has expired");
+    }
+    user.password = await bcrypt.hash(newPassword, 10);
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpires = undefined;
+    
+    await user.save();
+
+    return { message: "Password reset successful" };
+}
