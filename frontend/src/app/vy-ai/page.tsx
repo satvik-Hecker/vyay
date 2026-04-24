@@ -115,10 +115,10 @@ export default function ChatPage() {
         
         {/* Header */}
         <div className="px-6 py-4 border-b border-zinc-800 flex items-center gap-4 bg-zinc-900/30">
-          <div className="w-10 h-10 rounded-xl bg-lime-400 flex items-center justify-center shadow-[0_0_20px_rgba(163,230,53,0.2)]">
+          <div className="w-10 h-10 rounded-xl hidden md:flex bg-lime-400  items-center justify-center shadow-[0_0_20px_rgba(163,230,53,0.2)]">
             <HugeiconsIcon icon={BotIcon} size={24} strokeWidth={1.5} className="text-zinc-950" />
           </div>
-          <div>
+          <div className="ml-12 md:ml-0">
             <h1 className="text-lg font-bold text-white tracking-tight">Vy - AI</h1>
             <div className="flex items-center gap-1.5">
               <div className="w-1.5 h-1.5 rounded-full bg-lime-400 animate-pulse" />
