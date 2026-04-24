@@ -8,7 +8,7 @@ import {
   Task01Icon,
   BotIcon,
   Analytics01Icon,
-  Settings01Icon,
+  
   HelpCircleIcon,
   Logout01Icon,
 } from "@hugeicons/core-free-icons";
@@ -166,12 +166,7 @@ export default function Sidebar() {
             </p>
 
             <nav className="space-y-1">
-              <SidebarItem
-                icon={Settings01Icon}
-                label="Settings"
-                active={pathname === "/settings"}
-                onClick={() => handleClick("/settings")}
-              />
+             
               <SidebarItem
                 icon={HelpCircleIcon}
                 label="About Vyay"
