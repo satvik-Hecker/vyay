@@ -1,5 +1,6 @@
-import { registerUser,loginUser,requestPasswordReset, resetPassword } from "../services/auth.service.js";
+import { registerUser,loginUser,requestPasswordReset, resetPassword as resetPasswordService} from "../services/auth.service.js";
 import sendEmail from "../utils/sendEmail.js";
+import { passwordResetEmailTemplate } from "../utils/templates/passwordResetEmail.js";
 
 export const register = async(req,res)=>{
     try{
@@ -44,7 +45,7 @@ export const forgotPassword = async (req, res) => {
             email,
             subject: "Reset your Vyay Password",
             message: `Forgot your password? Click here to reset it: ${resetUrl}\n\nIf you didn't request this, please ignore this email.`,
-           
+            html: passwordResetEmailTemplate(resetUrl),
         });
 
         res.status(200).json({

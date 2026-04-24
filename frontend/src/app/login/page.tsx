@@ -163,9 +163,9 @@ const LoginPage = () => {
             </div>
 
             <div className="flex justify-end text-xs text-muted-foreground">
-              <button className="hover:text-white transition-colors hover:underline">
+              <Link href="/forgot-password" className="hover:text-white transition-colors hover:underline">
                 Forgot password?
-              </button>
+              </Link>
             </div>
 
             <button
