@@ -171,7 +171,7 @@ export default function AddTransactionModal({
           transactionDate: date.toISOString(),
         };
 
-      const promise = fetch("http://localhost:5000/transactions", {
+      const promise = fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"}/transactions`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

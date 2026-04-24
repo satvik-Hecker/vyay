@@ -37,6 +37,8 @@ const CATEGORIES = [
   "Entertainment", "Travel", "Health", "Education", "Subscriptions", "Other",
 ];
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+
 // --- Utilities ---
 const formatDate = (dateString: string) => {
   const date = new Date(dateString);
@@ -120,7 +122,7 @@ export default function TransactionsPage() {
         setLoading(true);
         const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
-        const res = await fetch(`http://localhost:5000/transactions?page=${page}&limit=7`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"}/transactions?page=${page}&limit=7`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -141,7 +143,7 @@ export default function TransactionsPage() {
   const handleDelete = useCallback(async (id: string) => {
     try {
       const token = localStorage.getItem("token");
-      await fetch(`http://localhost:5000/transactions/${id}`, {
+      await fetch(`${API_URL}/transactions/${id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -156,7 +158,7 @@ export default function TransactionsPage() {
     try {
       const token = localStorage.getItem("token");
 
-      const res = await fetch(`http://localhost:5000/transactions/${editing._id}`, {
+      const res = await fetch(`${API_URL}/transactions/${editing._id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

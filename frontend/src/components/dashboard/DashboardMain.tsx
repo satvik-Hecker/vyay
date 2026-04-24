@@ -67,7 +67,7 @@ export default function DashboardMain() {
       setLoading(true);
     }
 
-    const res = await fetch("http://localhost:5000/dashboard", {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"}/dashboard`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
