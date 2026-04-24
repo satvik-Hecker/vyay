@@ -6,8 +6,8 @@ export default function manifest(): MetadataRoute.Manifest {
     description: 'Track expenses, analyze spending, and get AI-powered financial insights — all in one beautifully simple app.',
     start_url: '/dashboard',
     display: 'standalone',
-    background_color: '#00000',
-    theme_color: '#8BEB0B',
+    background_color: '#0c0a09',
+    theme_color: '#0c0a09',
     icons: [
       {
         src: '/icon-192x192.png',
