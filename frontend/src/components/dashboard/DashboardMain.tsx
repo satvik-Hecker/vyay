@@ -129,7 +129,7 @@ export default function DashboardMain() {
           <button
             onClick={() => fetchDashboard(true)}
             disabled={refreshing}
-            className="px-4 py-2 flex gap-2 items-center rounded-lg bg-lime-400 text-black font-medium 
+            className="px-4 py-2 flex gap-2 items-center justify-center rounded-lg bg-lime-400 text-black font-medium 
             hover:opacity-90 active:scale-95 transition disabled:opacity-50"
           >
             <CloudSync className={`w-5 h-5 ${refreshing ? "animate-spin" : ""}`} />

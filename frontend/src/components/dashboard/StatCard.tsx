@@ -89,9 +89,9 @@ export default function StatCard({
         {value}
       </h2>
 
-      {/* Bottom (Only render if we pass a change OR a subtitle) */}
+      
       {(change !== undefined || subtitle) && (
-        <div className="flex items-center gap-1.5 sm:gap-2 ">
+        <div className="flex items-center gap-2 sm:gap-2 ">
           {change !== undefined && (
             <>
               <HugeiconsIcon
@@ -99,7 +99,7 @@ export default function StatCard({
                 size={12}
                 className={trendColor}
               />
-              <p className={`text-xs sm:text-sm font-medium ${trendColor}`}>
+              <p className={`text-md sm:text-sm font-medium ${trendColor}`}>
                 {Math.abs(change)}%
               </p>
             </>
