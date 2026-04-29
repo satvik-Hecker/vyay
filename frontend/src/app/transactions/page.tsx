@@ -139,6 +139,19 @@ export default function TransactionsPage() {
     fetchTransactions();
   }, [page]);
 
+  useEffect(() => {
+    if (editing) {
+      setForm({
+        category: editing.category,
+        paymentMethod: editing.paymentMethod,
+        type: editing.type,
+        note: editing.note || "",
+        amount: editing.amount,
+        transactionDate: editing.transactionDate,
+      });
+    }
+  }, [editing]);
+
   // 4. Handlers
   const handleDelete = useCallback(async (id: string) => {
     try {
@@ -174,6 +187,14 @@ export default function TransactionsPage() {
       );
 
       setEditing(null);
+      setForm({
+        category: "",
+        paymentMethod: "cash",
+        type: "expense",
+        note: "",
+        amount: 0,
+        transactionDate: "",
+      });
     } catch {}
   };
 
@@ -481,7 +502,7 @@ export default function TransactionsPage() {
               </div>
 
               <div className="flex justify-end gap-2 pt-2">
-                <Button variant="outline" className="border-white/10 hover:bg-white/5" onClick={() => setEditing(null)}>
+                <Button variant="outline" className="border-white/10 hover:bg-white/5" onClick={() => { setEditing(null); setForm({ category: "", paymentMethod: "cash", type: "expense", note: "", amount: 0, transactionDate: "" }); }}>
                   Cancel
                 </Button>
                 <Button className="bg-lime-400 text-black hover:bg-lime-500 transition-colors" onClick={handleUpdate}>
