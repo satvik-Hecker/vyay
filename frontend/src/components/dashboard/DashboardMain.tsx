@@ -189,6 +189,8 @@ export default function DashboardMain() {
           <CashBalanceCard
             cash={data.cashVsBalance.cash}
             bank={data.cashVsBalance.bank}
+            monthlyChange={data.stats.income - data.stats.expense}
+            spark={data.weeklySpending.map((item) => item.amount)}
           />
         </div>
 

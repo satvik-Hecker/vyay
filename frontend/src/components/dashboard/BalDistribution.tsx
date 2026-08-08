@@ -10,16 +10,16 @@ import {
 type Props = {
   cash: number;
   bank: number;
+  monthlyChange: number;
+  spark?: number[];
 };
 
-export default function CashBalanceCard({ cash, bank }: Props) {
+export default function CashBalanceCard({ cash, bank, monthlyChange, spark = [] }: Props) {
   const total = cash + bank || 1;
 
   const cashPercent = Math.round((cash / total) * 100);
   const bankPercent = 100 - cashPercent;
 
-  // 🔥 MOCK monthly trend (replace later with real data)
-  const monthlyChange = 5200;
   const isPositive = monthlyChange >= 0;
 
   // 🔥 Risk logic
@@ -63,8 +63,7 @@ export default function CashBalanceCard({ cash, bank }: Props) {
   const bankStart = cashEnd;
   const bankEnd = bankStart + bankAngle;
 
-  // 🔥 Sparkline dummy data
-  const spark = [10, 20, 15, 30, 25, 40, 35];
+  const maxSpark = Math.max(...spark, 1);
 
   return (
     <motion.div
@@ -195,7 +194,7 @@ export default function CashBalanceCard({ cash, bank }: Props) {
               stroke="#22c55e"
               strokeWidth="2"
               points={spark
-                .map((v, i) => `${i * 12},${30 - v / 2}`)
+                .map((v, i) => `${i * 12},${30 - (v / maxSpark) * 26}`)
                 .join(" ")}
             />
           </svg>

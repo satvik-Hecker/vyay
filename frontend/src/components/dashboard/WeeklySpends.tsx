@@ -37,10 +37,12 @@ const fullDay: Record<string, string> = {
 export default function WeeklySpendingCard({ data }: Props) {
   const [hovered, setHovered] = useState<Hovered>(null);
 
-  // 🔥 Add displayAmount for zero bars
+  // Zero-amount days get a small nub proportional to the week's real max,
+  // so an entirely expense-free week renders flat instead of maxing out every bar.
+  const maxAmount = Math.max(...data.map((d) => d.amount), 0);
   const chartData = data.map((d) => ({
     ...d,
-    displayAmount: d.amount === 0 ? 3 : d.amount,
+    displayAmount: d.amount === 0 && maxAmount > 0 ? maxAmount * 0.03 : d.amount,
   }));
 
   // ranking
@@ -79,7 +81,7 @@ export default function WeeklySpendingCard({ data }: Props) {
 
   return (
     <div className="flex flex-col bg-zinc-900 border border-white/10 rounded-xl p-5">
-      
+
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-md font-medium text-white">
@@ -87,7 +89,12 @@ export default function WeeklySpendingCard({ data }: Props) {
         </h2>
       </div>
 
-      {/* Chart */}
+      {maxAmount === 0 ? (
+        <div className="h-28 flex flex-col items-center justify-center gap-1 text-center">
+          <p className="text-sm text-zinc-300">No expenses this week 🎉</p>
+          <p className="text-xs text-zinc-500">Nothing spent since {data[0]?.day}</p>
+        </div>
+      ) : (
       <div className="relative h-28">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={chartData}>
@@ -142,7 +149,7 @@ export default function WeeklySpendingCard({ data }: Props) {
             {/* Bars */}
             <Bar
               dataKey="displayAmount"
-              radius={[20, 20, 20, 20]}
+              radius={[6, 6, 6, 6]}
               isAnimationActive
             >
               {chartData.map((entry, index) => (
@@ -200,12 +207,13 @@ export default function WeeklySpendingCard({ data }: Props) {
                 {fullDay[hovered.data.day]}
               </p>
               <p className="text-lime-600 font-semibold">
-                ₹{hovered.data.amount}
+                ₹{hovered.data.amount.toLocaleString("en-IN")}
               </p>
             </div>
           </div>
         )}
       </div>
+      )}
     </div>
   );
 }

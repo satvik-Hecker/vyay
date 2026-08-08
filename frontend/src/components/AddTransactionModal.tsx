@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import {
   Dialog,
@@ -34,47 +34,139 @@ type Transaction = {
 
 /* ---------- PARSER ---------- */
 
+const EXPENSE_TYPE_KEYWORDS = ["debited", "spent", "paid", "sent", "withdrawn", "purchased", "bought", "debit"];
+const INCOME_TYPE_KEYWORDS = ["credited", "received", "salary", "earned", "credit", "deposited", "refund", "cashback", "bonus"];
+
+const EXPENSE_CATEGORY_KEYWORDS: Record<string, string[]> = {
+  "Food & Dining": ["food", "restaurant", "swiggy", "zomato", "lunch", "dinner", "breakfast", "cafe", "coffee", "dining"],
+  "Groceries": ["grocery", "groceries", "supermarket", "bigbasket", "blinkit", "zepto", "dmart"],
+  "Transport": ["uber", "ola", "cab", "taxi", "auto", "fuel", "petrol", "diesel", "metro", "bus", "train", "rapido", "parking"],
+  "Rent": ["rent"],
+  "Utilities": ["electricity", "water bill", "wifi", "internet", "broadband", "utility", "utilities", "recharge", "gas bill"],
+  "Shopping": ["amazon", "flipkart", "myntra", "shopping", "mall"],
+  "Entertainment": ["movie", "netflix", "spotify", "hotstar", "bookmyshow", "entertainment", "prime video"],
+  "Travel": ["flight", "hotel", "trip", "travel", "airbnb", "makemytrip", "irctc"],
+  "Health": ["hospital", "doctor", "medicine", "pharmacy", "medical", "clinic"],
+  "Education": ["tuition", "course", "school", "college", "fees", "books"],
+  "Subscriptions": ["subscription", "membership"],
+};
+
+const INCOME_CATEGORY_KEYWORDS: Record<string, string[]> = {
+  "Salary": ["salary", "payroll"],
+  "Pocket Money": ["pocket money", "allowance"],
+  "Freelance": ["freelance", "gig", "client project"],
+  "Business": ["business", "invoice", "sales"],
+  "Investment": ["dividend", "interest", "investment", "mutual fund", "stocks"],
+  "Gift": ["gift"],
+};
+
+const MONTH_NAMES = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
+
+function earliestIndexOf(lower: string, keywords: string[]): number {
+  let min = -1;
+  for (const kw of keywords) {
+    const idx = lower.indexOf(kw);
+    if (idx !== -1 && (min === -1 || idx < min)) min = idx;
+  }
+  return min;
+}
+
+function findEarliestCategory(
+  lower: string,
+  map: Record<string, string[]>
+): { category: string; index: number } | null {
+  let best: { category: string; index: number } | null = null;
+  for (const [category, keywords] of Object.entries(map)) {
+    const idx = earliestIndexOf(lower, keywords);
+    if (idx !== -1 && (!best || idx < best.index)) {
+      best = { category, index: idx };
+    }
+  }
+  return best;
+}
+
+function extractDate(text: string): { date?: string; raw?: string; index?: number } {
+  let m = text.match(/\b(\d{1,2})[-/](\d{1,2})[-/](\d{2,4})\b/);
+  if (m) {
+    const year = m[3].length === 2 ? `20${m[3]}` : m[3];
+    const month = m[2].padStart(2, "0");
+    const day = m[1].padStart(2, "0");
+    return { date: `${year}-${month}-${day}`, raw: m[0], index: m.index };
+  }
+
+  m = text.match(/\b\d{4}-\d{2}-\d{2}\b/);
+  if (m) return { date: m[0], raw: m[0], index: m.index };
+
+  const monthRegex = new RegExp(`\\b(\\d{1,2})[\\s-]?(${MONTH_NAMES.join("|")})[a-z]*[\\s-]?(\\d{2,4})?\\b`, "i");
+  m = text.match(monthRegex);
+  if (m) {
+    const day = m[1].padStart(2, "0");
+    const monthNum = String(MONTH_NAMES.indexOf(m[2].toLowerCase()) + 1).padStart(2, "0");
+    const year = m[3] ? (m[3].length === 2 ? `20${m[3]}` : m[3]) : String(new Date().getFullYear());
+    return { date: `${year}-${monthNum}-${day}`, raw: m[0], index: m.index };
+  }
+
+  return {};
+}
+
+function stripNoise(text: string): string {
+  return text
+    .replace(/(avl\.?\s*bal(ance)?|available\s*balance|\bbal)\.?\s*[:-]?\s*(rs\.?|inr\.?|₹)?\s*[\d,]+(\.\d+)?/gi, " ")
+    .replace(/a\/?c\.?\s*(no\.?)?\s*\w*\d{3,}\w*/gi, " ")
+    .replace(/card\s*(no\.?)?\s*(ending)?\s*\w*\d{3,}\w*/gi, " ")
+    .replace(/\b(ref|txn|utr|order)\.?\s*(id|no)?\.?\s*[:-]?\s*\w*\d{4,}\w*/gi, " ")
+    .replace(/x{2,}\d+/gi, " ");
+}
+
+function extractAmount(cleanText: string): number | undefined {
+  const currencyMatch = cleanText.match(/(?:₹|rs\.?|inr\.?|rupees?)\s*([\d,]+(?:\.\d{1,2})?)/i);
+  if (currencyMatch) return Number(currencyMatch[1].replace(/,/g, ""));
+
+  const plainMatch = cleanText.match(/\b\d[\d,]*(?:\.\d{1,2})?\b/);
+  if (plainMatch) return Number(plainMatch[0].replace(/,/g, ""));
+
+  return undefined;
+}
+
+function extractAccount(lower: string): "cash" | "bank" | undefined {
+  if (/\bcash\b/.test(lower)) return "cash";
+  if (/(upi|neft|imps|netbanking|\ba\/?c\b|bank|card)/.test(lower)) return "bank";
+  return undefined;
+}
+
 function parseTransaction(text: string) {
   const lower = text.toLowerCase();
 
+  const expenseCatMatch = findEarliestCategory(lower, EXPENSE_CATEGORY_KEYWORDS);
+  const incomeCatMatch = findEarliestCategory(lower, INCOME_CATEGORY_KEYWORDS);
+
+  const expenseVerbIdx = earliestIndexOf(lower, EXPENSE_TYPE_KEYWORDS);
+  const incomeVerbIdx = earliestIndexOf(lower, INCOME_TYPE_KEYWORDS);
+
   let type: "income" | "expense" | undefined;
-
-  if (["debited","spent","paid","sent"].some(k => lower.includes(k))) {
+  if (expenseVerbIdx !== -1 && (incomeVerbIdx === -1 || expenseVerbIdx <= incomeVerbIdx)) {
     type = "expense";
-  } else if (["credited","received","salary","earned"].some(k => lower.includes(k))) {
+  } else if (incomeVerbIdx !== -1) {
     type = "income";
+  } else if (expenseCatMatch && !incomeCatMatch) {
+    type = "expense";
+  } else if (incomeCatMatch && !expenseCatMatch) {
+    type = "income";
+  } else if (expenseCatMatch && incomeCatMatch) {
+    type = expenseCatMatch.index <= incomeCatMatch.index ? "expense" : "income";
   }
 
-  let amount: number | undefined;
+  const category =
+    type === "expense" ? expenseCatMatch?.category : type === "income" ? incomeCatMatch?.category : undefined;
 
-  const rsMatch = text.match(/rs\.?\s?([\d,]+(\.\d+)?)/i);
-  if (rsMatch) {
-    amount = Number(rsMatch[1].replace(/,/g, ""));
-  }
+  const { date, raw, index } = extractDate(text);
+  const withoutDate = raw && index !== undefined ? text.slice(0, index) + " " + text.slice(index + raw.length) : text;
+  const cleanText = stripNoise(withoutDate);
 
-  let account: "cash" | "bank" = "cash";
+  const amount = extractAmount(cleanText);
+  const account = extractAccount(lower);
 
-  if (lower.includes("upi") || lower.includes("account") || lower.includes("bank")) {
-    account = "bank";
-  }
-
-  let date: string | undefined;
-
-  const match =
-    text.match(/\b\d{2}[-/]\d{2}[-/]\d{2,4}\b/) ||
-    text.match(/\b\d{4}-\d{2}-\d{2}\b/);
-
-  if (match) {
-    const raw = match[0].replace(/\//g, "-");
-    const parts = raw.split("-");
-    if (parts[2].length === 2) {
-      date = `20${parts[2]}-${parts[1]}-${parts[0]}`;
-    } else {
-      date = raw;
-    }
-  }
-
-  return { amount, type, account, date };
+  return { amount, type, account, date, category };
 }
 
 /* ---------- CONSTANTS ---------- */
@@ -88,6 +180,17 @@ const INCOME_CATEGORIES = [
   "Salary","Pocket Money","Freelance","Business","Investment","Gift" ,"Other"
 ];
 
+function emptyForm(): TransactionInput {
+  return {
+    amount: 0,
+    type: "expense",
+    category: "",
+    paymentMethod: "cash",
+    transactionDate: new Date().toISOString().slice(0, 10),
+    note: "",
+  };
+}
+
 /* ---------- COMPONENT ---------- */
 
 export default function AddTransactionModal({
@@ -99,44 +202,65 @@ export default function AddTransactionModal({
   setOpen: (v: boolean) => void;
   onSuccess?: (txn: Transaction) => void;
 }) {
-  const [form, setForm] = useState<TransactionInput>({
-    amount: 0,
-    type: "expense",
-    category: "",
-    paymentMethod: "cash",
-    transactionDate: new Date().toISOString().slice(0, 10),
-    note: "",
-  });
+  const [form, setForm] = useState<TransactionInput>(emptyForm);
 
   const [quickInput, setQuickInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [highlight, setHighlight] = useState(false);
+  const lastAutofillSignature = useRef<string | null>(null);
 
   const categories =
     form.type === "income"
       ? INCOME_CATEGORIES
       : EXPENSE_CATEGORIES;
 
+  /* ---------- RESET ON OPEN ---------- */
+
+  useEffect(() => {
+    if (open) {
+      setForm(emptyForm());
+      setQuickInput("");
+      lastAutofillSignature.current = null;
+    }
+  }, [open]);
+
   /* ---------- PARSE ---------- */
 
-  function handleParse(text: string) {
+  const handleParse = useCallback((text: string) => {
     const parsed = parseTransaction(text);
 
-    setForm((prev) => ({
-      ...prev,
-      amount: parsed.amount ?? prev.amount,
-      type: parsed.type ?? prev.type,
-      paymentMethod: parsed.account ?? prev.paymentMethod,
-      transactionDate: parsed.date ?? prev.transactionDate,
-    }));
+    setForm((prev) => {
+      const type = parsed.type ?? prev.type;
+      const category = parsed.category ?? (type !== prev.type ? "" : prev.category);
 
-    if (parsed.amount || parsed.type) {
+      return {
+        ...prev,
+        amount: parsed.amount ?? prev.amount,
+        type,
+        category,
+        paymentMethod: parsed.account ?? prev.paymentMethod,
+        transactionDate: parsed.date ?? prev.transactionDate,
+      };
+    });
+
+    const hasSignal = parsed.amount !== undefined || parsed.type !== undefined || parsed.category !== undefined;
+    if (!hasSignal) return;
+
+    const signature = JSON.stringify([parsed.amount, parsed.type, parsed.category, parsed.account, parsed.date]);
+    if (signature !== lastAutofillSignature.current) {
+      lastAutofillSignature.current = signature;
       setHighlight(true);
       setTimeout(() => setHighlight(false), 800);
 
       toast.success("Auto-filled ✨", { duration: 1000 });
     }
-  }
+  }, []);
+
+  useEffect(() => {
+    if (!quickInput.trim()) return;
+    const id = setTimeout(() => handleParse(quickInput), 500);
+    return () => clearTimeout(id);
+  }, [quickInput, handleParse]);
 
   /* ---------- SUBMIT ---------- */
 
@@ -330,10 +454,7 @@ export default function AddTransactionModal({
 
               <textarea
                 value={quickInput}
-                onChange={(e) => {
-                  setQuickInput(e.target.value);
-                  handleParse(e.target.value);
-                }}
+                onChange={(e) => setQuickInput(e.target.value)}
                 placeholder="Paste bank SMS..."
                 className="w-full h-36 p-3 rounded-lg bg-zinc-800 border border-white/10
                 transition-all duration-200 focus:ring-2 focus:ring-lime-400/50
@@ -350,10 +471,7 @@ export default function AddTransactionModal({
                 ].map((ex) => (
                   <button
                     key={ex}
-                    onClick={() => {
-                      setQuickInput(ex);
-                      handleParse(ex);
-                    }}
+                    onClick={() => setQuickInput(ex)}
                     className="block w-full text-left px-3 py-2 rounded-lg bg-white/5
                     transition-all duration-200 hover:bg-white/10
                     hover:translate-x-1 active:scale-[0.98]"
